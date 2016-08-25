@@ -1,0 +1,811 @@
+fileTypes: [
+  "puck"
+]
+name: "Puck"
+patterns: [
+  {
+    include: "#expression"
+  }
+]
+repository:
+  "arithmetic-operator":
+    match: "\\*\\*|\\*|/|\\-|\\+|%"
+    name: "keyword.operator.arithmetic.puck"
+  "array-literal":
+    begin: "\\["
+    beginCaptures:
+      "0":
+        name: "meta.brace.square.puck"
+    end: "\\]"
+    endCaptures:
+      "0":
+        name: "meta.brace.square.puck"
+    name: "meta.array.literal.puck"
+    patterns: [
+      {
+        include: "#expression"
+      }
+    ]
+  "assignment-operator":
+    match: "\\*\\*=|\\*=|(?<!\\()/=|%=|\\+=|\\-="
+    name: "keyword.operator.assignment.puck"
+  "await-modifier":
+    match: "\\bawait\\b"
+    name: "storage.modifier.puck"
+  block:
+    begin: "\\{"
+    beginCaptures:
+      "0":
+        name: "meta.brace.curly.puck"
+    end: "\\}"
+    endCaptures:
+      "0":
+        name: "meta.brace.curly.puck"
+    name: "meta.block.puck"
+    patterns: [
+      {
+        include: "#object-member"
+      }
+      {
+        include: "#expression"
+      }
+    ]
+  "boolean-literal":
+    match: "\\b(false|true)\\b"
+    name: "constant.language.boolean.puck"
+  comment:
+    name: "comment.puck"
+    patterns: [
+      {
+        include: "#comment-line"
+      }
+    ]
+  "comment-line":
+    match: "(//).*$\\n?"
+    name: "comment.line.puck"
+  "control-keyword":
+    match: "(?<!\\.)\\b(break|catch|continue|debugger|else|finally|for|if|return|loop|then|throw|try|while|yield)\\b"
+    name: "keyword.control.puck"
+  "decl-block":
+    begin: "\\{"
+    beginCaptures:
+      "0":
+        name: "meta.brace.curly.puck"
+    end: "\\}"
+    endCaptures:
+      "0":
+        name: "meta.brace.curly.puck"
+    name: "meta.decl.block.puck"
+    patterns: [
+      {
+        include: "#expression"
+      }
+    ]
+  declaration:
+    name: "meta.declaration.puck"
+    patterns: [
+      {
+        include: "#function-declaration"
+      }
+      {
+        include: "#object-declaration"
+      }
+      {
+        include: "#type-declaration"
+      }
+    ]
+  expression:
+    name: "meta.expression.puck"
+    patterns: [
+      {
+        include: "#for-in-simple"
+      }
+      {
+        include: "#string"
+      }
+      {
+        include: "#regex"
+      }
+      {
+        include: "#template"
+      }
+      {
+        include: "#comment"
+      }
+      {
+        include: "#literal"
+      }
+      {
+        include: "#paren-expression"
+      }
+      {
+        include: "#var-expr"
+      }
+      {
+        include: "#declaration"
+      }
+      {
+        include: "#new-expr"
+      }
+      {
+        include: "#block"
+      }
+      {
+        include: "#import-operator"
+      }
+      {
+        include: "#expression-operator"
+      }
+      {
+        include: "#imply-operator"
+      }
+      {
+        include: "#relational-operator"
+      }
+      {
+        include: "#arithmetic-operator"
+      }
+      {
+        include: "#logic-operator"
+      }
+      {
+        include: "#assignment-operator"
+      }
+      {
+        include: "#storage-keyword"
+      }
+      {
+        include: "#type-primitive"
+      }
+      {
+        include: "#function-call"
+      }
+      {
+        include: "#control-keyword"
+      }
+    ]
+  "expression-operator":
+    match: "\\b(in|as|is)\\b"
+    name: "keyword.others.puck"
+  "expression-type":
+    name: "meta.expression.puck"
+    patterns: [
+      {
+        include: "#string"
+      }
+      {
+        include: "#regex"
+      }
+      {
+        include: "#template"
+      }
+      {
+        include: "#comment"
+      }
+      {
+        include: "#literal"
+      }
+      {
+        include: "#paren-expression"
+      }
+      {
+        include: "#import-operator"
+      }
+      {
+        include: "#expression-operator"
+      }
+      {
+        include: "#imply-operator"
+      }
+      {
+        include: "#relational-operator"
+      }
+      {
+        include: "#arithmetic-operator"
+      }
+      {
+        include: "#logic-operator"
+      }
+      {
+        include: "#assignment-operator"
+      }
+      {
+        include: "#type-primitive"
+      }
+      {
+        include: "#function-call"
+      }
+    ]
+  "field-declaration":
+    begin: "(?<!\\()\\s*((?:\\b[a-zA-Z_$][\\w$]*)|(?:\\'[^']*\\')|(?:\\\"[^\"]*\\\"))\\s*(\\?\\s*)?(?=(=|:))"
+    beginCaptures:
+      "1":
+        name: "variable.puck"
+      "2":
+        name: "keyword.others.puck"
+    end: "(?=\\}|;|,|$)|(?<=\\})"
+    name: "meta.field.declaration.puck"
+    patterns: [
+      {
+        include: "#expression"
+      }
+    ]
+  "for-in-simple":
+    captures:
+      "2":
+        name: "keyword.others.puck"
+    match: "\\s*\\b([a-zA-Z_$][\\w$]*)\\s+(in)\\b"
+    name: "forin.expr.puck"
+  "function-call":
+    name: "functioncall.expr.puck"
+    patterns: [
+      {
+        include: "#await-modifier"
+      }
+      {
+        include: "#type-parameters"
+      }
+      {
+        include: "#paren-expression"
+      }
+    ]
+  "function-declaration":
+    begin: "\\b(?:(export)\\s+)?(?:(async)\\s+)?(fn\\b)(?:\\s+([a-zA-Z_$][\\w$]*))?\\s*"
+    beginCaptures:
+      "1":
+        name: "storage.type.puck"
+      "2":
+        name: "storage.modifier.puck"
+      "3":
+        name: "storage.type.function.puck"
+      "4":
+        name: "entity.name.function.puck"
+    end: "(?=;|\\})|(?<=\\})"
+    name: "meta.function.puck"
+    patterns: [
+      {
+        include: "#comment"
+      }
+      {
+        include: "#type-parameters"
+      }
+      {
+        include: "#function-type-parameters"
+      }
+      {
+        include: "#return-type"
+      }
+      {
+        include: "#function-overload-declaration"
+      }
+      {
+        include: "#decl-block"
+      }
+    ]
+  "function-overload-declaration":
+    captures:
+      "1":
+        name: "storage.type.puck"
+      "2":
+        name: "storage.type.function.puck"
+      "3":
+        name: "entity.name.function.puck"
+    match: "\\b(?:(export)\\s+)?(fn\\b)(?:\\s+([a-zA-Z_$][\\w$]*))?\\s*"
+    name: "meta.function.overload.puck"
+  "function-type-parameters":
+    begin: "\\("
+    beginCaptures:
+      "0":
+        name: "meta.brace.round.puck"
+    end: "\\)"
+    endCaptures:
+      "0":
+        name: "meta.brace.round.puck"
+    name: "meta.function.type.parameter.puck"
+    patterns: [
+      {
+        include: "#comment"
+      }
+      {
+        include: "#parameter-name"
+      }
+      {
+        include: "#type-annotation"
+      }
+      {
+        include: "#variable-initializer"
+      }
+    ]
+  "imply-operator":
+    match: "=>"
+    name: "keyword.operator.puck"
+  "import-operator":
+    match: "\\b(import|from)\\b"
+    name: "keyword.control.import.include.puck"
+  "indexer-declaration":
+    begin: "\\["
+    beginCaptures:
+      "0":
+        name: "meta.brace.square.puck"
+    end: "(\\])\\s*(\\?\\s*)?|$"
+    endCaptures:
+      "1":
+        name: "meta.brace.square.puck"
+      "2":
+        name: "keyword.others.puck"
+    name: "meta.indexer.declaration.puck"
+    patterns: [
+      {
+        include: "#type-annotation"
+      }
+      {
+        include: "#indexer-parameter"
+      }
+      {
+        include: "#expression"
+      }
+    ]
+  "indexer-parameter":
+    captures:
+      "1":
+        name: "variable.parameter.puck"
+    match: "([a-zA-Z_$][\\w$]*)(?=\\:)"
+    name: "meta.indexer.parameter.puck"
+  literal:
+    name: "literal.puck"
+    patterns: [
+      {
+        include: "#numeric-literal"
+      }
+      {
+        include: "#boolean-literal"
+      }
+      {
+        include: "#array-literal"
+      }
+      {
+        include: "#this-literal"
+      }
+    ]
+  "logic-operator":
+    match: "\\b(not|and|or)\\b"
+    name: "keyword.operator.arithmetic.puck"
+  "numeric-literal":
+    match: "\\b(?<=[^$])((0(x|X)[0-9a-fA-F]+)|(0(o|O)[0-7]+)|(0(b|B)(0|1)+)|(([0-9]+(\\.[0-9]+)?))([eE]([+-]?)[0-9]+(\\.[0-9]+)?)?)\\b"
+    name: "constant.numeric.puck"
+  "object-body":
+    begin: "\\{"
+    beginCaptures:
+      "0":
+        name: "meta.brace.curly.puck"
+    end: "\\}"
+    endCaptures:
+      "0":
+        name: "meta.brace.curly.puck"
+    name: "meta.object.body.puck"
+    patterns: [
+      {
+        include: "#string"
+      }
+      {
+        include: "#comment"
+      }
+      {
+        include: "#field-declaration"
+      }
+      {
+        include: "#indexer-declaration"
+      }
+      {
+        include: "#type-annotation"
+      }
+      {
+        include: "#variable-initializer"
+      }
+      {
+        include: "#static-modifier"
+      }
+      {
+        include: "#property-accessor"
+      }
+    ]
+  "object-declaration":
+    begin: "\\b(?:(export)\\s+)?\\b(?:(abstract)\\s+)?\\b(?<!\\.)(class|interface)\\b"
+    beginCaptures:
+      "1":
+        name: "storage.type.puck"
+      "2":
+        name: "storage.modifier.puck"
+      "3":
+        name: "storage.type.puck"
+    end: "(?<=\\})"
+    endCaptures:
+      "1":
+        name: "brace.curly.puck"
+    name: "meta.declaration.object.puck"
+    patterns: [
+      {
+        include: "#comment"
+      }
+      {
+        include: "#object-name"
+      }
+      {
+        include: "#type-parameters"
+      }
+      {
+        include: "#object-body"
+      }
+    ]
+  "object-member":
+    begin: "[a-zA-Z_$][\\w$]*\\s*:"
+    end: "(?=,|\\})"
+    name: "meta.object.member.puck"
+    patterns: [
+      {
+        include: "#expression"
+      }
+    ]
+  "object-name":
+    captures:
+      "0":
+        name: "entity.name.class.puck"
+    match: "[a-zA-Z_$][\\w$]*"
+    name: "meta.object.name.puck"
+  "parameter-name":
+    captures:
+      "1":
+        name: "storage.modifier.puck"
+      "2":
+        name: "keyword.others.puck"
+      "3":
+        name: "variable.parameter.puck"
+      "4":
+        name: "keyword.others.puck"
+    match: "(?:\\s*\\b(public|private|protected)\\b\\s+)?(\\.\\.\\.)?\\s*([a-zA-Z_$][\\w$]*)\\s*(\\??)"
+    name: "parameter.name.puck"
+  "paren-expression":
+    begin: "\\("
+    beginCaptures:
+      "0":
+        name: "meta.brace.paren.puck"
+    end: "\\)"
+    endCaptures:
+      "0":
+        name: "meta.brace.paren.puck"
+    patterns: [
+      {
+        include: "#expression"
+      }
+    ]
+  "property-accessor":
+    match: "\\b(get|set)\\b"
+    name: "storage.type.property.puck"
+  "qstring-double":
+    begin: "\""
+    end: "\"|(?:[^\\\\\\n]$)"
+    name: "string.double.puck"
+    patterns: [
+      {
+        include: "#string-character-escape"
+      }
+    ]
+  "qstring-single":
+    begin: "'"
+    end: "\\'|(?:[^\\\\\\n]$)"
+    name: "string.single.puck"
+    patterns: [
+      {
+        include: "#string-character-escape"
+      }
+    ]
+  regex:
+    begin: "(?<=[=(:,\\[]|^|return|&&|\\|\\||!)\\s*(/)(?![/*+{}?])"
+    end: "$|(/)[igm]*"
+    name: "string.regex.puck"
+    patterns: [
+      {
+        match: "\\\\."
+        name: "constant.character.escape.puck"
+      }
+      {
+        match: "\\[(\\\\\\]|[^\\]])*\\]"
+        name: "constant.character.class.puck"
+      }
+    ]
+  "relational-operator":
+    match: "==|!=|<=|>=|=|<|>"
+    name: "keyword.operator.comparison.puck"
+  "return-type":
+    begin: "(?<=\\))\\s*:"
+    end: "(?=$)|(?=\\{|;|//)"
+    name: "meta.return.type.puck"
+    patterns: [
+      {
+        include: "#type"
+      }
+    ]
+  "self-literal":
+    match: "\\b(self)\\b"
+    name: "constant.language.self.puck"
+  "storage-keyword":
+    match: "\\b((let( mut)?)|fn|const|export)\\b"
+    name: "storage.type.puck"
+  string:
+    name: "string.puck"
+    patterns: [
+      {
+        include: "#qstring-single"
+      }
+      {
+        include: "#qstring-double"
+      }
+    ]
+  "string-character-escape":
+    match: "\\\\(x\\h{2}|[0-2][0-7]{,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|['\"nrt\\\\]|$)"
+    name: "constant.character.escape"
+  template:
+    begin: "`"
+    beginCaptures:
+      "0":
+        name: "string.template.puck"
+    end: "`"
+    endCaptures:
+      "0":
+        name: "string.template.puck"
+    name: "meta.template.puck"
+    patterns: [
+      {
+        include: "#template-substitution-element"
+      }
+      {
+        include: "#template-string-contents"
+      }
+    ]
+  "template-string-contents":
+    begin: ".*?"
+    end: "(?=(\\$\\{|`))"
+    name: "string.template.puck"
+    patterns: [
+      {
+        include: "#string-character-escape"
+      }
+    ]
+  "template-substitution-element":
+    begin: "\\$\\{"
+    beginCaptures:
+      "0":
+        name: "keyword.others.puck"
+    end: "\\}"
+    endCaptures:
+      "0":
+        name: "keyword.others.puck"
+    name: "template.element.puck"
+    patterns: [
+      {
+        include: "#expression"
+      }
+    ]
+  type:
+    name: "meta.type.puck"
+    patterns: [
+      {
+        include: "#type-primitive"
+      }
+      {
+        include: "#type-parameters"
+      }
+      {
+        include: "#type-tuple"
+      }
+      {
+        include: "#type-object"
+      }
+      {
+        include: "#type-operator"
+      }
+      {
+        include: "#type-paren-or-function-type-parameters"
+      }
+      {
+        include: "#type-function-return-type"
+      }
+      {
+        include: "#type-name"
+      }
+    ]
+  "type-annotation":
+    begin: ":"
+    end: "(?=$|[,);\\}\\]]|//)|(?==[^>])|(?<=[\\}>\\]\\)]|[a-zA-Z_$])\\s*(?=\\{)"
+    name: "meta.type.annotation.puck"
+    patterns: [
+      {
+        include: "#expression-operator"
+      }
+      {
+        include: "#type"
+      }
+      {
+        include: "#string"
+      }
+      {
+        include: "#comment"
+      }
+    ]
+  "type-declaration":
+    begin: "\\b(type)\\b\\s+([a-zA-Z_$][\\w$]*)\\s*"
+    beginCaptures:
+      "1":
+        name: "keyword.other.puck"
+      "2":
+        name: "entity.name.class.puck"
+    end: "(?=$|[,);>]|type|fn|trait)"
+    name: "meta.type.declaration.puck"
+    patterns: [
+      {
+        include: "#type-parameters"
+      }
+      {
+        include: "#type"
+      }
+      {
+        match: "=\\s*"
+        name: "keyword.operator.comparison.puck"
+      }
+    ]
+  "type-function-return-type":
+    begin: "=>"
+    beginCaptures:
+      "0":
+        name: "keyword.operator.puck"
+    end: "(?=\\s*[,\\)\\{=;>]|//|$)"
+    name: "meta.type.function.return.puck"
+    patterns: [
+      {
+        include: "#type"
+      }
+    ]
+  "type-name":
+    captures:
+      "1":
+        name: "entity.name.type.puck"
+    match: "[a-zA-Z_$][.\\w$]*"
+    name: "meta.type.name.puck"
+  "type-object":
+    begin: "\\{"
+    beginCaptures:
+      "0":
+        name: "meta.brace.curly.puck"
+    end: "\\}"
+    endCaptures:
+      "0":
+        name: "meta.brace.curly.puck"
+    name: "meta.object.type.puck"
+    patterns: [
+      {
+        include: "#comment"
+      }
+      {
+        include: "#field-declaration"
+      }
+      {
+        include: "#method-declaration"
+      }
+      {
+        include: "#indexer-declaration"
+      }
+      {
+        include: "#type-annotation"
+      }
+    ]
+  "type-operator":
+    match: "[.|]"
+    name: "keyword.operator.type.puck"
+  "type-parameters":
+    begin: "([a-zA-Z_$][\\w$]*)?(<)"
+    beginCaptures:
+      "1":
+        name: "entity.name.type.puck"
+      "2":
+        name: "meta.brace.angle.puck"
+    end: "(?=$)|(>)"
+    endCaptures:
+      "2":
+        name: "meta.brace.angle.puck"
+    name: "meta.type.parameters.puck"
+    patterns: [
+      {
+        match: "\\b(extends)\\b"
+        name: "keyword.other.puck"
+      }
+      {
+        include: "#comment"
+      }
+      {
+        include: "#type"
+      }
+    ]
+  "type-paren-or-function-type-parameters":
+    begin: "(?:\\b(new)\\b)?\\s*\\("
+    beginCaptures:
+      "1":
+        name: "keyword.control.puck"
+    end: "\\)"
+    name: "meta.type.paren.cover.puck"
+    patterns: [
+      {
+        include: "#comment"
+      }
+      {
+        include: "#type"
+      }
+      {
+        include: "#function-type-parameters"
+      }
+    ]
+  "type-tuple":
+    begin: "\\["
+    beginCaptures:
+      "0":
+        name: "meta.brace.square.puck"
+    end: "\\]"
+    endCaptures:
+      "0":
+        name: "meta.brace.square.puck"
+    name: "meta.type.tuple.puck"
+    patterns: [
+      {
+        include: "#type"
+      }
+      {
+        include: "#comment"
+      }
+    ]
+  "var-expr":
+    begin: "(?<!\\()\\s*\\b(let(?!\\s+mut)|const)\\b"
+    beginCaptures:
+      "1":
+        name: "storage.type.puck"
+    end: "(?=$|;)"
+    name: "meta.var.expr.puck"
+    patterns: [
+      {
+        include: "#var-single-variable"
+      }
+      {
+        include: "#comment"
+      }
+    ]
+  "var-single-variable":
+    begin: "\\b([a-zA-Z_$][\\w$]*)\\s*(=?)"
+    beginCaptures:
+      "1":
+        name: "variable.puck"
+    end: "(?=$|[;,])"
+    name: "meta.var-single-variable.expr.puck"
+    patterns: [
+      {
+        include: "#type-annotation"
+      }
+      {
+        include: "#string"
+      }
+      {
+        include: "#comment"
+      }
+      {
+        include: "#expression"
+      }
+    ]
+  "variable-initializer":
+    begin: "(=)"
+    beginCaptures:
+      "1":
+        name: "keyword.operator.comparison.puck"
+    end: "(?=$|[,);=])"
+    patterns: [
+      {
+        include: "#expression"
+      }
+    ]
+scopeName: "source.puck"
