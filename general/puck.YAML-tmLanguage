@@ -58,7 +58,7 @@ repository:
 
   control-keyword:
     name: keyword.control.puck
-    match: (?<!\.)\b(break|catch|continue|debugger|else|finally|for|if|return|loop|then|throw|try|while|yield)\b
+    match: (?<!\.)\b(break|catch|continue|debugger|else|finally|for|if|loop|return|self|then|throw|try|while|yield)\b
 
   decl-block:
     name: meta.decl.block.puck
@@ -94,7 +94,6 @@ repository:
     - include: '#block'
     - include: '#import-operator'
     - include: '#expression-operator'
-    - include: '#imply-operator'
     - include: '#relational-operator'
     - include: '#arithmetic-operator'
     - include: '#logic-operator'
@@ -120,7 +119,6 @@ repository:
     # - include: '#if-expression'
     - include: '#import-operator'
     - include: '#expression-operator'
-    - include: '#imply-operator'
     - include: '#relational-operator'
     - include: '#arithmetic-operator'
     - include: '#logic-operator'
@@ -153,12 +151,11 @@ repository:
 
   function-declaration:
     name: meta.function.puck
-    begin: \b(?:(export)\s+)?(?:(async)\s+)?(fn\b)(?:\s+([a-zA-Z_$][\w$]*))?\s*
+    begin: \b(?:(export)\s+)?(fn\b)(?:\s+([a-zA-Z_$][\w$]*))?\s*
     beginCaptures:
       '1': {name: storage.type.puck}
-      '2': {name: storage.modifier.puck}
-      '3': {name: storage.type.function.puck}
-      '4': {name: entity.name.function.puck}
+      '2': {name: storage.type.function.puck}
+      '3': {name: entity.name.function.puck}
     end: (?=;|\})|(?<=\})
     patterns:
     - include: '#comment'
@@ -170,7 +167,7 @@ repository:
 
   function-overload-declaration:
     name: meta.function.overload.puck
-    match: \b(?:(export)\s+)?(fn\b)(?:\s+([a-zA-Z_$][\w$]*))?\s*
+    match: \b(fn\b)(?:\s+([a-zA-Z_$][\w$]*))?\s*
     captures:
       '1': {name: storage.type.puck}
       '2': {name: storage.type.function.puck}
@@ -189,10 +186,6 @@ repository:
     - include: '#parameter-name'
     - include: '#type-annotation'
     - include: '#variable-initializer'
-
-  imply-operator:
-    name: keyword.operator.puck
-    match: =>
 
   import-operator:
     name: keyword.control.import.include.puck
@@ -218,13 +211,36 @@ repository:
     captures:
       '1': {name: variable.parameter.puck}
 
+  lambda-declaration:
+    name: meta.function.puck
+    patterns:
+    - include: '#comment'
+    - include: '#type-parameters'
+    - include: '#lambda-type-parameters'
+    - include: '#expression'
+    - include: '#decl-block'
+
+  lambda-type-parameters:
+    name: meta.function.type.parameter.puck
+    begin: \|
+    beginCaptures:
+      '0': {name: meta.pipe.puck}
+    end: \|
+    endCaptures:
+      '0': {name: meta.pipe.puck}
+    patterns:
+    - include: '#comment'
+    - include: '#parameter-name'
+    - include: '#type-annotation'
+    - include: '#variable-initializer'
+
   literal:
     name: literal.puck
     patterns:
     - include: '#numeric-literal'
     - include: '#boolean-literal'
     - include: '#array-literal'
-    - include: '#this-literal'
+    - include: '#self-literal'
 
   logic-operator:
     name: keyword.operator.arithmetic.puck
@@ -283,12 +299,11 @@ repository:
 
   parameter-name:
     name: parameter.name.puck
-    match: (?:\s*\b(public|private|protected)\b\s+)?(\.\.\.)?\s*([a-zA-Z_$][\w$]*)\s*(\??)
+    match: (?:\s*\b\s+)?(\.\.\.)?\s*([a-zA-Z_$][\w$]*)\s*(\??)
     captures:
-      '1': {name: storage.modifier.puck}
-      '2': {name: keyword.others.puck}
-      '3': {name: variable.parameter.puck}
-      '4': {name: keyword.others.puck}
+      '1': {name: keyword.others.puck}
+      '2': {name: variable.parameter.puck}
+      '3': {name: keyword.others.puck}
 
   paren-expression:
     begin: \(
@@ -305,28 +320,38 @@ repository:
     match: \b(get|set)\b
 
   qstring-double:
-    name: string.double.puck
+    name: meta.string.double.puck
     begin: '"'
-    end: '"|(?:[^\\\n]$)'
+    beginCaptures:
+      '0': {name: string.double.puck}
+    end: '"'
+    endCaptures:
+      '0': {name: string.double.puck}
     patterns:
-    - include: '#string-character-escape'
+    - include: '#template-substitution-element'
+    - include: '#double-string-contents'
 
   qstring-single:
-    name: string.single.puck
+    name: meta.string.single.puck
     begin: ''''
-    end: \'|(?:[^\\\n]$)
+    beginCaptures:
+      '0': {name: string.single.puck}
+    end: ''''
+    endCaptures:
+      '0': {name: string.single.puck}
     patterns:
-    - include: '#string-character-escape'
+    - include: '#template-substitution-element'
+    - include: '#single-string-contents'
 
-  regex:
-    name: string.regex.puck
-    begin: (?<=[=(:,\[]|^|return|&&|\|\||!)\s*(/)(?![/*+{}?])
-    end: $|(/)[igm]*
-    patterns:
-    - name: constant.character.escape.puck
-      match: \\.
-    - name: constant.character.class.puck
-      match: \[(\\\]|[^\]])*\]
+  # regex:
+  #   name: string.regex.puck
+  #   begin: (?<=[=(:,\[]|^|return|&&|\|\||!)\s*(/)(?![/*+{}?])
+  #   end: $|(/)[igm]*
+  #   patterns:
+  #   - name: constant.character.escape.puck
+  #     match: \\.
+  #   - name: constant.character.class.puck
+  #     match: \[(\\\]|[^\]])*\]
 
   relational-operator:
     name: keyword.operator.comparison.puck
@@ -340,12 +365,12 @@ repository:
     - include: '#type'
 
   self-literal:
-    name: constant.language.self.puck
+    name: variable.language.self.puck
     match: \b(self)\b
 
   storage-keyword:
     name: storage.type.puck
-    match: \b((let( mut)?)|fn|const|export)\b
+    match: \b(?:(export)\s+)?((let(?:\s+(mut))?)|const)\b
 
   string:
     name: string.puck
@@ -357,22 +382,17 @@ repository:
     name: constant.character.escape
     match: \\(x\h{2}|[0-2][0-7]{,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|['"nrt\\]|$)
 
-  template:
-    name: meta.template.puck
-    begin: '`'
-    beginCaptures:
-      '0': {name: string.template.puck}
-    end: '`'
-    endCaptures:
-      '0': {name: string.template.puck}
-    patterns:
-    - include: '#template-substitution-element'
-    - include: '#template-string-contents'
-
-  template-string-contents:
+  double-string-contents:
     name: string.template.puck
     begin: .*?
-    end: (?=(\$\{|`))
+    end: (?=(\$\{|"))
+    patterns:
+    - include: '#string-character-escape'
+
+  single-string-contents:
+    name: string.template.puck
+    begin: .*?
+    end: (?=(\$\{|'))
     patterns:
     - include: '#string-character-escape'
 
@@ -481,6 +501,10 @@ repository:
     - include: '#comment'
     - include: '#type'
     - include: '#function-type-parameters'
+
+  type-primitive:
+    name: storage.type.source.puck
+    match: \b(Self)\b
 
   type-tuple:
     name: meta.type.tuple.puck

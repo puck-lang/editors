@@ -64,7 +64,7 @@ repository:
     match: "(//).*$\\n?"
     name: "comment.line.puck"
   "control-keyword":
-    match: "(?<!\\.)\\b(break|catch|continue|debugger|else|finally|for|if|return|loop|then|throw|try|while|yield)\\b"
+    match: "(?<!\\.)\\b(break|catch|continue|debugger|else|finally|for|if|loop|return|self|then|throw|try|while|yield)\\b"
     name: "keyword.control.puck"
   "decl-block":
     begin: "\\{"
@@ -92,6 +92,15 @@ repository:
       }
       {
         include: "#type-declaration"
+      }
+    ]
+  "double-string-contents":
+    begin: ".*?"
+    end: "(?=(\\$\\{|\"))"
+    name: "string.template.puck"
+    patterns: [
+      {
+        include: "#string-character-escape"
       }
     ]
   expression:
@@ -135,9 +144,6 @@ repository:
       }
       {
         include: "#expression-operator"
-      }
-      {
-        include: "#imply-operator"
       }
       {
         include: "#relational-operator"
@@ -195,9 +201,6 @@ repository:
         include: "#expression-operator"
       }
       {
-        include: "#imply-operator"
-      }
-      {
         include: "#relational-operator"
       }
       {
@@ -250,15 +253,13 @@ repository:
       }
     ]
   "function-declaration":
-    begin: "\\b(?:(export)\\s+)?(?:(async)\\s+)?(fn\\b)(?:\\s+([a-zA-Z_$][\\w$]*))?\\s*"
+    begin: "\\b(?:(export)\\s+)?(fn\\b)(?:\\s+([a-zA-Z_$][\\w$]*))?\\s*"
     beginCaptures:
       "1":
         name: "storage.type.puck"
       "2":
-        name: "storage.modifier.puck"
-      "3":
         name: "storage.type.function.puck"
-      "4":
+      "3":
         name: "entity.name.function.puck"
     end: "(?=;|\\})|(?<=\\})"
     name: "meta.function.puck"
@@ -290,7 +291,7 @@ repository:
         name: "storage.type.function.puck"
       "3":
         name: "entity.name.function.puck"
-    match: "\\b(?:(export)\\s+)?(fn\\b)(?:\\s+([a-zA-Z_$][\\w$]*))?\\s*"
+    match: "\\b(fn\\b)(?:\\s+([a-zA-Z_$][\\w$]*))?\\s*"
     name: "meta.function.overload.puck"
   "function-type-parameters":
     begin: "\\("
@@ -316,9 +317,6 @@ repository:
         include: "#variable-initializer"
       }
     ]
-  "imply-operator":
-    match: "=>"
-    name: "keyword.operator.puck"
   "import-operator":
     match: "\\b(import|from)\\b"
     name: "keyword.control.import.include.puck"
@@ -351,6 +349,49 @@ repository:
         name: "variable.parameter.puck"
     match: "([a-zA-Z_$][\\w$]*)(?=\\:)"
     name: "meta.indexer.parameter.puck"
+  "lambda-declaration":
+    name: "meta.function.puck"
+    patterns: [
+      {
+        include: "#comment"
+      }
+      {
+        include: "#type-parameters"
+      }
+      {
+        include: "#lambda-type-parameters"
+      }
+      {
+        include: "#expression"
+      }
+      {
+        include: "#decl-block"
+      }
+    ]
+  "lambda-type-parameters":
+    begin: "\\|"
+    beginCaptures:
+      "0":
+        name: "meta.pipe.puck"
+    end: "\\|"
+    endCaptures:
+      "0":
+        name: "meta.pipe.puck"
+    name: "meta.function.type.parameter.puck"
+    patterns: [
+      {
+        include: "#comment"
+      }
+      {
+        include: "#parameter-name"
+      }
+      {
+        include: "#type-annotation"
+      }
+      {
+        include: "#variable-initializer"
+      }
+    ]
   literal:
     name: "literal.puck"
     patterns: [
@@ -364,7 +405,7 @@ repository:
         include: "#array-literal"
       }
       {
-        include: "#this-literal"
+        include: "#self-literal"
       }
     ]
   "logic-operator":
@@ -455,14 +496,12 @@ repository:
   "parameter-name":
     captures:
       "1":
-        name: "storage.modifier.puck"
+        name: "keyword.others.puck"
       "2":
-        name: "keyword.others.puck"
-      "3":
         name: "variable.parameter.puck"
-      "4":
+      "3":
         name: "keyword.others.puck"
-    match: "(?:\\s*\\b(public|private|protected)\\b\\s+)?(\\.\\.\\.)?\\s*([a-zA-Z_$][\\w$]*)\\s*(\\??)"
+    match: "(?:\\s*\\b\\s+)?(\\.\\.\\.)?\\s*([a-zA-Z_$][\\w$]*)\\s*(\\??)"
     name: "parameter.name.puck"
   "paren-expression":
     begin: "\\("
@@ -483,34 +522,38 @@ repository:
     name: "storage.type.property.puck"
   "qstring-double":
     begin: "\""
-    end: "\"|(?:[^\\\\\\n]$)"
-    name: "string.double.puck"
+    beginCaptures:
+      "0":
+        name: "string.double.puck"
+    end: "\""
+    endCaptures:
+      "0":
+        name: "string.double.puck"
+    name: "meta.string.double.puck"
     patterns: [
       {
-        include: "#string-character-escape"
+        include: "#template-substitution-element"
+      }
+      {
+        include: "#double-string-contents"
       }
     ]
   "qstring-single":
     begin: "'"
-    end: "\\'|(?:[^\\\\\\n]$)"
-    name: "string.single.puck"
+    beginCaptures:
+      "0":
+        name: "string.single.puck"
+    end: "'"
+    endCaptures:
+      "0":
+        name: "string.single.puck"
+    name: "meta.string.single.puck"
     patterns: [
       {
-        include: "#string-character-escape"
-      }
-    ]
-  regex:
-    begin: "(?<=[=(:,\\[]|^|return|&&|\\|\\||!)\\s*(/)(?![/*+{}?])"
-    end: "$|(/)[igm]*"
-    name: "string.regex.puck"
-    patterns: [
-      {
-        match: "\\\\."
-        name: "constant.character.escape.puck"
+        include: "#template-substitution-element"
       }
       {
-        match: "\\[(\\\\\\]|[^\\]])*\\]"
-        name: "constant.character.class.puck"
+        include: "#single-string-contents"
       }
     ]
   "relational-operator":
@@ -527,9 +570,18 @@ repository:
     ]
   "self-literal":
     match: "\\b(self)\\b"
-    name: "constant.language.self.puck"
+    name: "variable.language.self.puck"
+  "single-string-contents":
+    begin: ".*?"
+    end: "(?=(\\$\\{|'))"
+    name: "string.template.puck"
+    patterns: [
+      {
+        include: "#string-character-escape"
+      }
+    ]
   "storage-keyword":
-    match: "\\b((let( mut)?)|fn|const|export)\\b"
+    match: "\\b(?:(export)\\s+)?((let(?:\\s+(mut))?)|const)\\b"
     name: "storage.type.puck"
   string:
     name: "string.puck"
@@ -544,33 +596,6 @@ repository:
   "string-character-escape":
     match: "\\\\(x\\h{2}|[0-2][0-7]{,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|['\"nrt\\\\]|$)"
     name: "constant.character.escape"
-  template:
-    begin: "`"
-    beginCaptures:
-      "0":
-        name: "string.template.puck"
-    end: "`"
-    endCaptures:
-      "0":
-        name: "string.template.puck"
-    name: "meta.template.puck"
-    patterns: [
-      {
-        include: "#template-substitution-element"
-      }
-      {
-        include: "#template-string-contents"
-      }
-    ]
-  "template-string-contents":
-    begin: ".*?"
-    end: "(?=(\\$\\{|`))"
-    name: "string.template.puck"
-    patterns: [
-      {
-        include: "#string-character-escape"
-      }
-    ]
   "template-substitution-element":
     begin: "\\$\\{"
     beginCaptures:
@@ -743,6 +768,9 @@ repository:
         include: "#function-type-parameters"
       }
     ]
+  "type-primitive":
+    match: "\\b(Self)\\b"
+    name: "storage.type.source.puck"
   "type-tuple":
     begin: "\\["
     beginCaptures:
