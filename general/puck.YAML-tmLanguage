@@ -32,10 +32,6 @@ repository:
     name: keyword.operator.assignment.puck
     match: \*\*=|\*=|(?<!\()/=|%=|\+=|\-=
 
-  await-modifier:
-    name: storage.modifier.puck
-    match: \bawait\b
-
   block:
     name: meta.block.puck
     begin: \{
@@ -58,7 +54,7 @@ repository:
 
   control-keyword:
     name: keyword.control.puck
-    match: (?<!\.)\b(break|catch|continue|debugger|else|finally|for|if|loop|return|self|then|throw|try|while|yield)\b
+    match: (?<!\.)\b(break|continue|debugger|else|for|if|match|return|self|then|while)\b
 
   decl-block:
     name: meta.decl.block.puck
@@ -145,7 +141,6 @@ repository:
   function-call:
     name: functioncall.expr.puck
     patterns:
-    - include: '#await-modifier'
     - include: '#type-parameters'
     - include: '#paren-expression'
 

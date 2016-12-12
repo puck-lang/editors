@@ -29,9 +29,6 @@ repository:
   "assignment-operator":
     match: "\\*\\*=|\\*=|(?<!\\()/=|%=|\\+=|\\-="
     name: "keyword.operator.assignment.puck"
-  "await-modifier":
-    match: "\\bawait\\b"
-    name: "storage.modifier.puck"
   block:
     begin: "\\{"
     beginCaptures:
@@ -64,7 +61,7 @@ repository:
     match: "(//).*$\\n?"
     name: "comment.line.puck"
   "control-keyword":
-    match: "(?<!\\.)\\b(break|catch|continue|debugger|else|finally|for|if|loop|return|self|then|throw|try|while|yield)\\b"
+    match: "(?<!\\.)\\b(break|continue|debugger|else|for|if|match|return|self|then|while)\\b"
     name: "keyword.control.puck"
   "decl-block":
     begin: "\\{"
@@ -242,9 +239,6 @@ repository:
   "function-call":
     name: "functioncall.expr.puck"
     patterns: [
-      {
-        include: "#await-modifier"
-      }
       {
         include: "#type-parameters"
       }

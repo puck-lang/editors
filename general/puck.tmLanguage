@@ -63,13 +63,6 @@
 			<key>name</key>
 			<string>keyword.operator.assignment.puck</string>
 		</dict>
-		<key>await-modifier</key>
-		<dict>
-			<key>match</key>
-			<string>\bawait\b</string>
-			<key>name</key>
-			<string>storage.modifier.puck</string>
-		</dict>
 		<key>block</key>
 		<dict>
 			<key>begin</key>
@@ -135,7 +128,7 @@
 		<key>control-keyword</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;!\.)\b(break|catch|continue|debugger|else|finally|for|if|loop|return|self|then|throw|try|while|yield)\b</string>
+			<string>(?&lt;!\.)\b(break|continue|debugger|else|for|if|match|return|self|then|while)\b</string>
 			<key>name</key>
 			<string>keyword.control.puck</string>
 		</dict>
@@ -420,10 +413,6 @@
 			<string>functioncall.expr.puck</string>
 			<key>patterns</key>
 			<array>
-				<dict>
-					<key>include</key>
-					<string>#await-modifier</string>
-				</dict>
 				<dict>
 					<key>include</key>
 					<string>#type-parameters</string>
