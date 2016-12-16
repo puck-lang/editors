@@ -85,9 +85,6 @@ repository:
         include: "#function-declaration"
       }
       {
-        include: "#object-declaration"
-      }
-      {
         include: "#type-declaration"
       }
     ]
@@ -404,7 +401,7 @@ repository:
     ]
   "logic-operator":
     match: "\\b(not|and|or)\\b"
-    name: "keyword.operator.arithmetic.puck"
+    name: "keyword.arithmetic.puck"
   "numeric-literal":
     match: "\\b(?<=[^$])((0(x|X)[0-9a-fA-F]+)|(0(o|O)[0-7]+)|(0(b|B)(0|1)+)|(([0-9]+(\\.[0-9]+)?))([eE]([+-]?)[0-9]+(\\.[0-9]+)?)?)\\b"
     name: "constant.numeric.puck"
@@ -444,34 +441,6 @@ repository:
         include: "#property-accessor"
       }
     ]
-  "object-declaration":
-    begin: "\\b(?:(export)\\s+)?\\b(?:(abstract)\\s+)?\\b(?<!\\.)(class|interface)\\b"
-    beginCaptures:
-      "1":
-        name: "storage.type.puck"
-      "2":
-        name: "storage.modifier.puck"
-      "3":
-        name: "storage.type.puck"
-    end: "(?<=\\})"
-    endCaptures:
-      "1":
-        name: "brace.curly.puck"
-    name: "meta.declaration.object.puck"
-    patterns: [
-      {
-        include: "#comment"
-      }
-      {
-        include: "#object-name"
-      }
-      {
-        include: "#type-parameters"
-      }
-      {
-        include: "#object-body"
-      }
-    ]
   "object-member":
     begin: "[a-zA-Z_$][\\w$]*\\s*:"
     end: "(?=,|\\})"
@@ -481,12 +450,6 @@ repository:
         include: "#expression"
       }
     ]
-  "object-name":
-    captures:
-      "0":
-        name: "entity.name.class.puck"
-    match: "[a-zA-Z_$][\\w$]*"
-    name: "meta.object.name.puck"
   "parameter-name":
     captures:
       "1":
