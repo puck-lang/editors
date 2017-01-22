@@ -72,13 +72,15 @@ repository:
     patterns:
     - include: '#function-declaration'
     - include: '#type-declaration'
+    - include: '#enum-declaration'
+    - include: '#trait-declaration'
+    - include: '#impl-declaration'
+    - include: '#implShort-declaration'
 
   expression:
     name: meta.expression.puck
     patterns:
-    - include: '#for-in-simple'
     - include: '#string'
-    - include: '#regex'
     - include: '#template'
     - include: '#comment'
     - include: '#literal'
@@ -106,12 +108,10 @@ repository:
     name: meta.expression.puck
     patterns:
     - include: '#string'
-    - include: '#regex'
     - include: '#template'
     - include: '#comment'
     - include: '#literal'
     - include: '#paren-expression'
-    # - include: '#if-expression'
     - include: '#import-operator'
     - include: '#expression-operator'
     - include: '#relational-operator'
@@ -130,12 +130,6 @@ repository:
     end: (?=\}|;|,|$)|(?<=\})
     patterns:
     - include: '#expression'
-
-  for-in-simple:
-    name: forin.expr.puck
-    match: \s*\b([a-zA-Z_$][\w$]*)\s+(in)\b
-    captures:
-      '2': {name: keyword.others.puck}
 
   function-call:
     name: functioncall.expr.puck
@@ -156,16 +150,16 @@ repository:
     - include: '#type-parameters'
     - include: '#function-type-parameters'
     - include: '#return-type'
-    - include: '#function-overload-declaration'
+    # - include: '#function-overload-declaration'
     - include: '#decl-block'
 
-  function-overload-declaration:
-    name: meta.function.overload.puck
-    match: \b(fn\b)(?:\s+([a-zA-Z_$][\w$]*))?\s*
-    captures:
-      '1': {name: storage.type.puck}
-      '2': {name: storage.type.function.puck}
-      '3': {name: entity.name.function.puck}
+  # function-overload-declaration:
+  #   name: meta.function.overload.puck
+  #   match: \b(fn\b)(?:\s+([a-zA-Z_$][\w$]*))?\s*
+  #   captures:
+  #     '1': {name: storage.type.puck}
+  #     '2': {name: storage.type.function.puck}
+  #     '3': {name: entity.name.function.puck}
 
   function-type-parameters:
     name: meta.function.type.parameter.puck
@@ -403,16 +397,66 @@ repository:
 
   type-declaration:
     name: meta.type.declaration.puck
-    begin: \b(type)\b\s+([a-zA-Z_$][\w$]*)\s*
+    match: \b(?:(export)\s+)?(type)\b\s*
+    captures:
+      '1': {name: storage.type.puck}
+      '2': {name: keyword.other.puck}
+    patterns:
+    - include: '#type-declaration-body'
+
+  type-declaration-body:
+    name: meta.type.declaration.body.puck
+    begin: \b([a-zA-Z_$][\w$]*)\s*
     beginCaptures:
-      '1': {name: keyword.other.puck}
-      '2': {name: entity.name.class.puck}
-    end: (?=$|[,);>]|type|fn|trait)
+      '1': {name: entity.name.type.puck}
+    end: (?=[})])
     patterns:
     - include: '#type-parameters'
     - include: '#type'
-    - name: keyword.operator.comparison.puck
-      match: =\s*
+
+  enum-declaration:
+    name: meta.enum.declaration.puck
+    begin: \b(?:(export)\s+)?(enum)\b\s+([a-zA-Z_$][\w$]*)\s*
+    beginCaptures:
+      '1': {name: storage.type.puck}
+      '2': {name: keyword.other.puck}
+      '3': {name: entity.name.type.puck}
+    end: (?<=\})
+    patterns:
+    - include: '#type-declaration-body'
+
+  trait-declaration:
+    name: meta.trait.declaration.puck
+    begin: \b(?:(export)\s+)?(trait)\b\s+([a-zA-Z_$][\w$]*)\s*
+    beginCaptures:
+      '1': {name: storage.type.puck}
+      '2': {name: keyword.other.puck}
+      '3': {name: entity.name.type.puck}
+    end: (?<=\})
+    patterns:
+    - include: '#function-declaration'
+
+  impl-declaration:
+    name: meta.impl.declaration.puck
+    begin: \b(impl)\b\s+([a-zA-Z_$][\w$]*)\s*\b(for)\b\s+([a-zA-Z_$][\w$]*)\s*
+    beginCaptures:
+      '1': {name: keyword.other.puck}
+      '2': {name: entity.name.type.puck}
+      '3': {name: keyword.other.puck}
+      '4': {name: entity.name.type.puck}
+    end: (?<=\})
+    patterns:
+    - include: '#function-declaration'
+
+  implShort-declaration:
+    name: meta.implShort.declaration.puck
+    begin: \b(impl)\b\s+([a-zA-Z_$][\w$]*)\s*
+    beginCaptures:
+      '1': {name: keyword.other.puck}
+      '2': {name: entity.name.type.puck}
+    end: (?<=\})
+    patterns:
+    - include: '#function-declaration'
 
   type-function-return-type:
     name: meta.type.function.return.puck

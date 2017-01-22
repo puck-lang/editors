@@ -87,6 +87,18 @@ repository:
       {
         include: "#type-declaration"
       }
+      {
+        include: "#enum-declaration"
+      }
+      {
+        include: "#trait-declaration"
+      }
+      {
+        include: "#impl-declaration"
+      }
+      {
+        include: "#implShort-declaration"
+      }
     ]
   "double-string-contents":
     begin: ".*?"
@@ -97,17 +109,27 @@ repository:
         include: "#string-character-escape"
       }
     ]
+  "enum-declaration":
+    begin: "\\b(?:(export)\\s+)?(enum)\\b\\s+([a-zA-Z_$][\\w$]*)\\s*"
+    beginCaptures:
+      "1":
+        name: "storage.type.puck"
+      "2":
+        name: "keyword.other.puck"
+      "3":
+        name: "entity.name.type.puck"
+    end: "(?<=\\})"
+    name: "meta.enum.declaration.puck"
+    patterns: [
+      {
+        include: "#type-declaration-body"
+      }
+    ]
   expression:
     name: "meta.expression.puck"
     patterns: [
       {
-        include: "#for-in-simple"
-      }
-      {
         include: "#string"
-      }
-      {
-        include: "#regex"
       }
       {
         include: "#template"
@@ -174,9 +196,6 @@ repository:
         include: "#string"
       }
       {
-        include: "#regex"
-      }
-      {
         include: "#template"
       }
       {
@@ -227,12 +246,6 @@ repository:
         include: "#expression"
       }
     ]
-  "for-in-simple":
-    captures:
-      "2":
-        name: "keyword.others.puck"
-    match: "\\s*\\b([a-zA-Z_$][\\w$]*)\\s+(in)\\b"
-    name: "forin.expr.puck"
   "function-call":
     name: "functioncall.expr.puck"
     patterns: [
@@ -268,22 +281,9 @@ repository:
         include: "#return-type"
       }
       {
-        include: "#function-overload-declaration"
-      }
-      {
         include: "#decl-block"
       }
     ]
-  "function-overload-declaration":
-    captures:
-      "1":
-        name: "storage.type.puck"
-      "2":
-        name: "storage.type.function.puck"
-      "3":
-        name: "entity.name.function.puck"
-    match: "\\b(fn\\b)(?:\\s+([a-zA-Z_$][\\w$]*))?\\s*"
-    name: "meta.function.overload.puck"
   "function-type-parameters":
     begin: "\\("
     beginCaptures:
@@ -306,6 +306,38 @@ repository:
       }
       {
         include: "#variable-initializer"
+      }
+    ]
+  "impl-declaration":
+    begin: "\\b(impl)\\b\\s+([a-zA-Z_$][\\w$]*)\\s*\\b(for)\\b\\s+([a-zA-Z_$][\\w$]*)\\s*"
+    beginCaptures:
+      "1":
+        name: "keyword.other.puck"
+      "2":
+        name: "entity.name.type.puck"
+      "3":
+        name: "keyword.other.puck"
+      "4":
+        name: "entity.name.type.puck"
+    end: "(?<=\\})"
+    name: "meta.impl.declaration.puck"
+    patterns: [
+      {
+        include: "#function-declaration"
+      }
+    ]
+  "implShort-declaration":
+    begin: "\\b(impl)\\b\\s+([a-zA-Z_$][\\w$]*)\\s*"
+    beginCaptures:
+      "1":
+        name: "keyword.other.puck"
+      "2":
+        name: "entity.name.type.puck"
+    end: "(?<=\\})"
+    name: "meta.implShort.declaration.puck"
+    patterns: [
+      {
+        include: "#function-declaration"
       }
     ]
   "import-operator":
@@ -568,6 +600,22 @@ repository:
         include: "#expression"
       }
     ]
+  "trait-declaration":
+    begin: "\\b(?:(export)\\s+)?(trait)\\b\\s+([a-zA-Z_$][\\w$]*)\\s*"
+    beginCaptures:
+      "1":
+        name: "storage.type.puck"
+      "2":
+        name: "keyword.other.puck"
+      "3":
+        name: "entity.name.type.puck"
+    end: "(?<=\\})"
+    name: "meta.trait.declaration.puck"
+    patterns: [
+      {
+        include: "#function-declaration"
+      }
+    ]
   type:
     name: "meta.type.puck"
     patterns: [
@@ -615,24 +663,31 @@ repository:
       }
     ]
   "type-declaration":
-    begin: "\\b(type)\\b\\s+([a-zA-Z_$][\\w$]*)\\s*"
+    captures:
+      "1":
+        name: "storage.type.puck"
+      "2":
+        name: "keyword.other.puck"
+    match: "\\b(?:(export)\\s+)?(type)\\b\\s*"
+    name: "meta.type.declaration.puck"
+    patterns: [
+      {
+        include: "#type-declaration-body"
+      }
+    ]
+  "type-declaration-body":
+    begin: "\\b([a-zA-Z_$][\\w$]*)\\s*"
     beginCaptures:
       "1":
-        name: "keyword.other.puck"
-      "2":
-        name: "entity.name.class.puck"
-    end: "(?=$|[,);>]|type|fn|trait)"
-    name: "meta.type.declaration.puck"
+        name: "entity.name.type.puck"
+    end: "(?=[})])"
+    name: "meta.type.declaration.body.puck"
     patterns: [
       {
         include: "#type-parameters"
       }
       {
         include: "#type"
-      }
-      {
-        match: "=\\s*"
-        name: "keyword.operator.comparison.puck"
       }
     ]
   "type-function-return-type":
