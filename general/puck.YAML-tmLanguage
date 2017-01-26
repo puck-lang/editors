@@ -106,10 +106,13 @@ repository:
       '0': {name: variable.other.puck}
 
   function-call:
-    name: functioncall.expr.puck
+    name: meta.expression.function-call.puck
+    begin: (?:\b([a-zA-Z_][\w]*)\b)?\(
+    beginCaptures:
+      '1': {name: entity.name.function.puck}
+    end: \)
     patterns:
-    - include: '#type-parameters'
-    - include: '#paren-expression'
+    - include: '#expression'
 
   function-declaration:
     name: meta.function.puck

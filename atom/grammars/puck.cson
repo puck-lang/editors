@@ -181,13 +181,15 @@ repository:
       }
     ]
   "function-call":
-    name: "functioncall.expr.puck"
+    begin: "(?:\\b([a-zA-Z_][\\w]*)\\b)?\\("
+    beginCaptures:
+      "1":
+        name: "entity.name.function.puck"
+    end: "\\)"
+    name: "meta.expression.function-call.puck"
     patterns: [
       {
-        include: "#type-parameters"
-      }
-      {
-        include: "#paren-expression"
+        include: "#expression"
       }
     ]
   "function-declaration":

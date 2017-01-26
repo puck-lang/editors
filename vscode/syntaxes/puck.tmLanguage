@@ -324,17 +324,25 @@
 		</dict>
 		<key>function-call</key>
 		<dict>
+			<key>begin</key>
+			<string>(?:\b([a-zA-Z_][\w]*)\b)?\(</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.puck</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\)</string>
 			<key>name</key>
-			<string>functioncall.expr.puck</string>
+			<string>meta.expression.function-call.puck</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#type-parameters</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#paren-expression</string>
+					<string>#expression</string>
 				</dict>
 			</array>
 		</dict>
