@@ -86,13 +86,9 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>meta.block.puck</string>
+			<string>meta.decl.block.puck</string>
 			<key>patterns</key>
 			<array>
-				<dict>
-					<key>include</key>
-					<string>#object-member</string>
-				</dict>
 				<dict>
 					<key>include</key>
 					<string>#expression</string>
@@ -128,41 +124,9 @@
 		<key>control-keyword</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;!\.)\b(break|continue|debugger|else|for|if|match|return|self|then|while)\b</string>
+			<string>(?&lt;!\.)\b(break|continue|debugger|else|for|if let|if|match|return|self|then|while)\b</string>
 			<key>name</key>
 			<string>keyword.control.puck</string>
-		</dict>
-		<key>decl-block</key>
-		<dict>
-			<key>begin</key>
-			<string>\{</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>meta.brace.curly.puck</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\}</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>meta.brace.curly.puck</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.decl.block.puck</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#expression</string>
-				</dict>
-			</array>
 		</dict>
 		<key>declaration</key>
 		<dict>
@@ -172,7 +136,7 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#function-declaration</string>
+					<string>#let-declaration</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -215,7 +179,7 @@
 		<key>enum-declaration</key>
 		<dict>
 			<key>begin</key>
-			<string>\b(?:(export)\s+)?(enum)\b\s+([a-zA-Z_$][\w$]*)\s*</string>
+			<string>\b(?:(export)\s+)?(enum)\b\s+([a-zA-Z_]\w*)\s*</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -240,6 +204,10 @@
 			<string>meta.enum.declaration.puck</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#type-parameters</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#type-declaration-body</string>
@@ -274,15 +242,11 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#var-expr</string>
+					<string>#function-declaration</string>
 				</dict>
 				<dict>
 					<key>include</key>
 					<string>#declaration</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#new-expr</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -291,10 +255,6 @@
 				<dict>
 					<key>include</key>
 					<string>#import-operator</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#expression-operator</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -311,10 +271,6 @@
 				<dict>
 					<key>include</key>
 					<string>#assignment-operator</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#storage-keyword</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -328,101 +284,41 @@
 					<key>include</key>
 					<string>#control-keyword</string>
 				</dict>
-			</array>
-		</dict>
-		<key>expression-operator</key>
-		<dict>
-			<key>match</key>
-			<string>\b(in|as|is)\b</string>
-			<key>name</key>
-			<string>keyword.others.puck</string>
-		</dict>
-		<key>expression-type</key>
-		<dict>
-			<key>name</key>
-			<string>meta.expression.puck</string>
-			<key>patterns</key>
-			<array>
 				<dict>
 					<key>include</key>
-					<string>#string</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#template</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#comment</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#literal</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#paren-expression</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#import-operator</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#expression-operator</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#relational-operator</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#arithmetic-operator</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#logic-operator</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#assignment-operator</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#type-primitive</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#function-call</string>
+					<string>#identifier</string>
 				</dict>
 			</array>
 		</dict>
-		<key>field-declaration</key>
+		<key>function-arguments-type-bound</key>
 		<dict>
 			<key>begin</key>
-			<string>(?&lt;!\()\s*((?:\b[a-zA-Z_$][\w$]*)|(?:\'[^']*\')|(?:\"[^"]*\"))\s*(\?\s*)?(?=(=|:))</string>
+			<string>(\())</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>variable.puck</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.others.puck</string>
+					<string>meta.paren.puck</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?=\}|;|,|$)|(?&lt;=\})</string>
+			<string>(\))\s*-&gt;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>meta.paren.puck</string>
+				</dict>
+			</dict>
 			<key>name</key>
-			<string>meta.field.declaration.puck</string>
+			<string>meta.type.function.return.puck</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#expression</string>
+					<string>#type-bound</string>
 				</dict>
 			</array>
 		</dict>
@@ -445,7 +341,7 @@
 		<key>function-declaration</key>
 		<dict>
 			<key>begin</key>
-			<string>\b(?:(export)\s+)?(fn\b)(?:\s+([a-zA-Z_$][\w$]*))?\s*</string>
+			<string>\b(?:(export)\s+)?(fn\b)(?:\s+([a-zA-Z_]\w*))?\s*</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -465,7 +361,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?=;|\})|(?&lt;=\})</string>
+			<string>(?=$|\})</string>
 			<key>name</key>
 			<string>meta.function.puck</string>
 			<key>patterns</key>
@@ -480,19 +376,19 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#function-type-parameters</string>
+					<string>#function-parameters</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#return-type</string>
+					<string>#function-return-type-bound</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#decl-block</string>
+					<string>#block</string>
 				</dict>
 			</array>
 		</dict>
-		<key>function-type-parameters</key>
+		<key>function-parameters</key>
 		<dict>
 			<key>begin</key>
 			<string>\(</string>
@@ -515,7 +411,7 @@
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>meta.function.type.parameter.puck</string>
+			<string>meta.function.parameters.puck</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -524,22 +420,73 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#parameter-name</string>
+					<string>#mutable-parameter-declaration</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#type-annotation</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#variable-initializer</string>
+					<string>#parameter-declaration</string>
 				</dict>
 			</array>
+		</dict>
+		<key>function-return-type-bound</key>
+		<dict>
+			<key>begin</key>
+			<string>\-&gt;</string>
+			<key>end</key>
+			<string>(?=$|\{)</string>
+			<key>name</key>
+			<string>meta.function.return-type.puck</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#type-bound</string>
+				</dict>
+			</array>
+		</dict>
+		<key>function-type-bound</key>
+		<dict>
+			<key>name</key>
+			<string>meta.type.function.puck</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#type-parameters</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#function-arguments-type-bound</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#type-bound</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#type-bound</string>
+				</dict>
+			</array>
+		</dict>
+		<key>identifier</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>variable.other.puck</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>\b([a-zA-Z_][\w]*)\b</string>
+			<key>name</key>
+			<string>meta.identifier.puck</string>
 		</dict>
 		<key>impl-declaration</key>
 		<dict>
 			<key>begin</key>
-			<string>\b(impl)\b\s+([a-zA-Z_$][\w$]*)\s*\b(for)\b\s+([a-zA-Z_$][\w$]*)\s*</string>
+			<string>\b(impl)\b\s+([a-zA-Z_]\w*)\s*\b(for)\b\s+([a-zA-Z_]\w*)\s*</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -578,7 +525,7 @@
 		<key>implShort-declaration</key>
 		<dict>
 			<key>begin</key>
-			<string>\b(impl)\b\s+([a-zA-Z_$][\w$]*)\s*</string>
+			<string>\b(impl)\b\s+([a-zA-Z_]\w*)\s*</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -611,66 +558,6 @@
 			<key>name</key>
 			<string>keyword.control.import.include.puck</string>
 		</dict>
-		<key>indexer-declaration</key>
-		<dict>
-			<key>begin</key>
-			<string>\[</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>meta.brace.square.puck</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(\])\s*(\?\s*)?|$</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>meta.brace.square.puck</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.others.puck</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.indexer.declaration.puck</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#type-annotation</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#indexer-parameter</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#expression</string>
-				</dict>
-			</array>
-		</dict>
-		<key>indexer-parameter</key>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>variable.parameter.puck</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>([a-zA-Z_$][\w$]*)(?=\:)</string>
-			<key>name</key>
-			<string>meta.indexer.parameter.puck</string>
-		</dict>
 		<key>lambda-declaration</key>
 		<dict>
 			<key>name</key>
@@ -695,7 +582,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#decl-block</string>
+					<string>#block</string>
 				</dict>
 			</array>
 		</dict>
@@ -743,6 +630,34 @@
 				</dict>
 			</array>
 		</dict>
+		<key>let-declaration</key>
+		<dict>
+			<key>begin</key>
+			<string>\b(let)\b</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.puck</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=$|[;,)])</string>
+			<key>name</key>
+			<string>meta.let.declaration.puck</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#mutable-variable-declaration</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable-declaration</string>
+				</dict>
+			</array>
+		</dict>
 		<key>literal</key>
 		<dict>
 			<key>name</key>
@@ -774,42 +689,32 @@
 			<key>name</key>
 			<string>keyword.arithmetic.puck</string>
 		</dict>
-		<key>numeric-literal</key>
-		<dict>
-			<key>match</key>
-			<string>\b(?&lt;=[^$])((0(x|X)[0-9a-fA-F]+)|(0(o|O)[0-7]+)|(0(b|B)(0|1)+)|(([0-9]+(\.[0-9]+)?))([eE]([+-]?)[0-9]+(\.[0-9]+)?)?)\b</string>
-			<key>name</key>
-			<string>constant.numeric.puck</string>
-		</dict>
-		<key>object-body</key>
+		<key>mutable-parameter-declaration</key>
 		<dict>
 			<key>begin</key>
-			<string>\{</string>
+			<string>\b(mut)\b\s+([a-zA-Z_]\w*)\s*</string>
 			<key>beginCaptures</key>
 			<dict>
-				<key>0</key>
+				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>meta.brace.curly.puck</string>
+					<string>storage.type.puck</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.readwrite.puck</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>\}</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>meta.brace.curly.puck</string>
-				</dict>
-			</dict>
+			<string>(?=$|[;,)])</string>
 			<key>name</key>
-			<string>meta.object.body.puck</string>
+			<string>meta.parameter.declaration.puck</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#string</string>
+					<string>#type-annotation</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -817,34 +722,80 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#field-declaration</string>
+					<string>#variable-initializer</string>
 				</dict>
+			</array>
+		</dict>
+		<key>mutable-variable-declaration</key>
+		<dict>
+			<key>begin</key>
+			<string>\b(mut)\b\s+([a-zA-Z_]\w*)\s*</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
 				<dict>
-					<key>include</key>
-					<string>#indexer-declaration</string>
+					<key>name</key>
+					<string>storage.type.puck</string>
 				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.other.readwrite.puck</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=$|[;,)])</string>
+			<key>name</key>
+			<string>meta.variable.declaration.puck</string>
+			<key>patterns</key>
+			<array>
 				<dict>
 					<key>include</key>
 					<string>#type-annotation</string>
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#comment</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#variable-initializer</string>
 				</dict>
+			</array>
+		</dict>
+		<key>named-type-bound</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
 				<dict>
-					<key>include</key>
-					<string>#static-modifier</string>
+					<key>name</key>
+					<string>entity.name.type.puck</string>
 				</dict>
+			</dict>
+			<key>match</key>
+			<string>\b([a-zA-Z_][\w]*)\b\s*</string>
+			<key>name</key>
+			<string>meta.type.named.puck</string>
+			<key>patterns</key>
+			<array>
 				<dict>
 					<key>include</key>
-					<string>#property-accessor</string>
+					<string>#type-parameters</string>
 				</dict>
 			</array>
+		</dict>
+		<key>numeric-literal</key>
+		<dict>
+			<key>match</key>
+			<string>\b(?&lt;=[^$])((0x[0-9a-fA-F]+)|(0o[0-7]+)|(0b(0|1)+)|(([0-9]+(\.[0-9]+)?))([eE]([+-]?)[0-9]+(\.[0-9]+)?)?)\b</string>
+			<key>name</key>
+			<string>constant.numeric.puck</string>
 		</dict>
 		<key>object-member</key>
 		<dict>
 			<key>begin</key>
-			<string>[a-zA-Z_$][\w$]*\s*:</string>
+			<string>[a-zA-Z_]\w*\s*:</string>
 			<key>end</key>
 			<string>(?=,|\})</string>
 			<key>name</key>
@@ -854,6 +805,78 @@
 				<dict>
 					<key>include</key>
 					<string>#expression</string>
+				</dict>
+			</array>
+		</dict>
+		<key>object-type-bound</key>
+		<dict>
+			<key>begin</key>
+			<string>\{</string>
+			<key>end</key>
+			<string>\}</string>
+			<key>name</key>
+			<string>meta.type.object.puck</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#object-type-bound-member</string>
+				</dict>
+			</array>
+		</dict>
+		<key>object-type-bound-member</key>
+		<dict>
+			<key>begin</key>
+			<string>\b([a-zA-Z_][\w]*)\b\s*:\s*</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.variable.puck</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=[,}]|(?:\b([a-zA-Z_][\w]*)\b\s*:))</string>
+			<key>name</key>
+			<string>meta.type.object.member.puck</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#type-bound</string>
+				</dict>
+			</array>
+		</dict>
+		<key>parameter-declaration</key>
+		<dict>
+			<key>begin</key>
+			<string>\b([a-zA-Z_]\w*)\s*</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.constant.puck</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=$|[;,)])</string>
+			<key>name</key>
+			<string>meta.parameter.declaration.puck</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#type-annotation</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable-initializer</string>
 				</dict>
 			</array>
 		</dict>
@@ -878,7 +901,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(?:\s*\b\s+)?(\.\.\.)?\s*([a-zA-Z_$][\w$]*)\s*(\??)</string>
+			<string>(?:\s*\b\s+)?(\.\.\.)?\s*([a-zA-Z_]\w*)\s*(\??)</string>
 			<key>name</key>
 			<string>parameter.name.puck</string>
 		</dict>
@@ -911,13 +934,6 @@
 					<string>#expression</string>
 				</dict>
 			</array>
-		</dict>
-		<key>property-accessor</key>
-		<dict>
-			<key>match</key>
-			<string>\b(get|set)\b</string>
-			<key>name</key>
-			<string>storage.type.property.puck</string>
 		</dict>
 		<key>qstring-double</key>
 		<dict>
@@ -1010,7 +1026,7 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#type</string>
+					<string>#type-bound</string>
 				</dict>
 			</array>
 		</dict>
@@ -1036,13 +1052,6 @@
 					<string>#string-character-escape</string>
 				</dict>
 			</array>
-		</dict>
-		<key>storage-keyword</key>
-		<dict>
-			<key>match</key>
-			<string>\b(?:(export)\s+)?((let(?:\s+(mut))?)|const)\b</string>
-			<key>name</key>
-			<string>storage.type.puck</string>
 		</dict>
 		<key>string</key>
 		<dict>
@@ -1071,24 +1080,8 @@
 		<dict>
 			<key>begin</key>
 			<string>\$\{</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.others.puck</string>
-				</dict>
-			</dict>
 			<key>end</key>
 			<string>\}</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.others.puck</string>
-				</dict>
-			</dict>
 			<key>name</key>
 			<string>template.element.puck</string>
 			<key>patterns</key>
@@ -1102,7 +1095,7 @@
 		<key>trait-declaration</key>
 		<dict>
 			<key>begin</key>
-			<string>\b(?:(export)\s+)?(trait)\b\s+([a-zA-Z_$][\w$]*)\s*</string>
+			<string>\b(?:(export)\s+)?(trait)\b\s+([a-zA-Z_]\w*)\s*</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -1129,11 +1122,63 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#type-parameters</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#function-declaration</string>
 				</dict>
 			</array>
 		</dict>
-		<key>type</key>
+		<key>tuple-type-bound</key>
+		<dict>
+			<key>begin</key>
+			<string>\(</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>meta.type.tuple.puck</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#tuple-type-bound-member</string>
+				</dict>
+			</array>
+		</dict>
+		<key>tuple-type-bound-member</key>
+		<dict>
+			<key>begin</key>
+			<string>(?=[^)])</string>
+			<key>end</key>
+			<string>,|(?=\))</string>
+			<key>name</key>
+			<string>meta.type.tuple.member.puck</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#type-bound</string>
+				</dict>
+			</array>
+		</dict>
+		<key>type-annotation</key>
+		<dict>
+			<key>begin</key>
+			<string>:</string>
+			<key>end</key>
+			<string>(?=$|[;,)=])</string>
+			<key>name</key>
+			<string>meta.type.annotation.puck</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#type-bound</string>
+				</dict>
+			</array>
+		</dict>
+		<key>type-bound</key>
 		<dict>
 			<key>name</key>
 			<string>meta.type.puck</string>
@@ -1145,65 +1190,23 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#type-parameters</string>
+					<string>#named-type-bound</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#type-tuple</string>
+					<string>#tuple-type-bound</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#type-object</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#type-operator</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#type-paren-or-function-type-parameters</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#type-function-return-type</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#type-name</string>
-				</dict>
-			</array>
-		</dict>
-		<key>type-annotation</key>
-		<dict>
-			<key>begin</key>
-			<string>:</string>
-			<key>end</key>
-			<string>(?=$|[,);\}\]]|//)|(?==[^&gt;])|(?&lt;=[\}&gt;\]\)]|[a-zA-Z_$])\s*(?=\{)</string>
-			<key>name</key>
-			<string>meta.type.annotation.puck</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#expression-operator</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#type</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#comment</string>
+					<string>#object-type-bound</string>
 				</dict>
 			</array>
 		</dict>
 		<key>type-declaration</key>
 		<dict>
-			<key>captures</key>
+			<key>begin</key>
+			<string>\b(?:(export)\s+)?(type)\b\s*</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
@@ -1216,8 +1219,8 @@
 					<string>keyword.other.puck</string>
 				</dict>
 			</dict>
-			<key>match</key>
-			<string>\b(?:(export)\s+)?(type)\b\s*</string>
+			<key>end</key>
+			<string>(?=[)}]|$)</string>
 			<key>name</key>
 			<string>meta.type.declaration.puck</string>
 			<key>patterns</key>
@@ -1231,7 +1234,7 @@
 		<key>type-declaration-body</key>
 		<dict>
 			<key>begin</key>
-			<string>\b([a-zA-Z_$][\w$]*)\s*</string>
+			<string>\s*\b([a-zA-Z_]\w*)\s*</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -1241,7 +1244,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?=[})])</string>
+			<string>(?=[)}]|$)</string>
 			<key>name</key>
 			<string>meta.type.declaration.body.puck</string>
 			<key>patterns</key>
@@ -1252,126 +1255,27 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#type</string>
+					<string>#object-type-bound</string>
 				</dict>
 			</array>
-		</dict>
-		<key>type-function-return-type</key>
-		<dict>
-			<key>begin</key>
-			<string>=&gt;</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.operator.puck</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(?=\s*[,\)\{=;&gt;]|//|$)</string>
-			<key>name</key>
-			<string>meta.type.function.return.puck</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#type</string>
-				</dict>
-			</array>
-		</dict>
-		<key>type-name</key>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.type.puck</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>[a-zA-Z_$][.\w$]*</string>
-			<key>name</key>
-			<string>meta.type.name.puck</string>
-		</dict>
-		<key>type-object</key>
-		<dict>
-			<key>begin</key>
-			<string>\{</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>meta.brace.curly.puck</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\}</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>meta.brace.curly.puck</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.object.type.puck</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#comment</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#field-declaration</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#method-declaration</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#indexer-declaration</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#type-annotation</string>
-				</dict>
-			</array>
-		</dict>
-		<key>type-operator</key>
-		<dict>
-			<key>match</key>
-			<string>[.|]</string>
-			<key>name</key>
-			<string>keyword.operator.type.puck</string>
 		</dict>
 		<key>type-parameters</key>
 		<dict>
 			<key>begin</key>
-			<string>([a-zA-Z_$][\w$]*)?(&lt;)</string>
+			<string>(&lt;)</string>
 			<key>beginCaptures</key>
 			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.type.puck</string>
-				</dict>
-				<key>2</key>
+				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>meta.brace.angle.puck</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?=$)|(&gt;)</string>
+			<string>(&gt;)</string>
 			<key>endCaptures</key>
 			<dict>
-				<key>2</key>
+				<key>0</key>
 				<dict>
 					<key>name</key>
 					<string>meta.brace.angle.puck</string>
@@ -1383,7 +1287,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>\b(extends)\b</string>
+					<string>\b(:)\b</string>
 					<key>name</key>
 					<string>keyword.other.puck</string>
 				</dict>
@@ -1393,39 +1297,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#type</string>
-				</dict>
-			</array>
-		</dict>
-		<key>type-paren-or-function-type-parameters</key>
-		<dict>
-			<key>begin</key>
-			<string>(?:\b(new)\b)?\s*\(</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.control.puck</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\)</string>
-			<key>name</key>
-			<string>meta.type.paren.cover.puck</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#comment</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#type</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#function-type-parameters</string>
+					<string>#type-bound</string>
 				</dict>
 			</array>
 		</dict>
@@ -1436,86 +1308,22 @@
 			<key>name</key>
 			<string>storage.type.source.puck</string>
 		</dict>
-		<key>type-tuple</key>
+		<key>variable-declaration</key>
 		<dict>
 			<key>begin</key>
-			<string>\[</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>meta.brace.square.puck</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\]</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>meta.brace.square.puck</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.type.tuple.puck</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#type</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#comment</string>
-				</dict>
-			</array>
-		</dict>
-		<key>var-expr</key>
-		<dict>
-			<key>begin</key>
-			<string>(?&lt;!\()\s*\b(let(?!\s+mut)|const)\b</string>
+			<string>\b([a-zA-Z_]\w*)\s*</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type.puck</string>
+					<string>variable.other.constant.puck</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?=$|;)</string>
+			<string>(?=$|[;,)])</string>
 			<key>name</key>
-			<string>meta.var.expr.puck</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#var-single-variable</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#comment</string>
-				</dict>
-			</array>
-		</dict>
-		<key>var-single-variable</key>
-		<dict>
-			<key>begin</key>
-			<string>\b([a-zA-Z_$][\w$]*)\s*(=?)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>variable.puck</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(?=$|[;,])</string>
-			<key>name</key>
-			<string>meta.var-single-variable.expr.puck</string>
+			<string>meta.variable.declaration.puck</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1524,15 +1332,11 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#string</string>
-				</dict>
-				<dict>
-					<key>include</key>
 					<string>#comment</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#expression</string>
+					<string>#variable-initializer</string>
 				</dict>
 			</array>
 		</dict>
@@ -1545,11 +1349,13 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.operator.comparison.puck</string>
+					<string>keyword.operator.assignment.puck</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?=$|[,);=])</string>
+			<string>(?=$|[;,)])</string>
+			<key>name</key>
+			<string>meta.variable.declaration.initializer.puck</string>
 			<key>patterns</key>
 			<array>
 				<dict>

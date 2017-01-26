@@ -38,11 +38,8 @@ repository:
     endCaptures:
       "0":
         name: "meta.brace.curly.puck"
-    name: "meta.block.puck"
+    name: "meta.decl.block.puck"
     patterns: [
-      {
-        include: "#object-member"
-      }
       {
         include: "#expression"
       }
@@ -61,28 +58,13 @@ repository:
     match: "(//).*$\\n?"
     name: "comment.line.puck"
   "control-keyword":
-    match: "(?<!\\.)\\b(break|continue|debugger|else|for|if|match|return|self|then|while)\\b"
+    match: "(?<!\\.)\\b(break|continue|debugger|else|for|if let|if|match|return|self|then|while)\\b"
     name: "keyword.control.puck"
-  "decl-block":
-    begin: "\\{"
-    beginCaptures:
-      "0":
-        name: "meta.brace.curly.puck"
-    end: "\\}"
-    endCaptures:
-      "0":
-        name: "meta.brace.curly.puck"
-    name: "meta.decl.block.puck"
-    patterns: [
-      {
-        include: "#expression"
-      }
-    ]
   declaration:
     name: "meta.declaration.puck"
     patterns: [
       {
-        include: "#function-declaration"
+        include: "#let-declaration"
       }
       {
         include: "#type-declaration"
@@ -110,7 +92,7 @@ repository:
       }
     ]
   "enum-declaration":
-    begin: "\\b(?:(export)\\s+)?(enum)\\b\\s+([a-zA-Z_$][\\w$]*)\\s*"
+    begin: "\\b(?:(export)\\s+)?(enum)\\b\\s+([a-zA-Z_]\\w*)\\s*"
     beginCaptures:
       "1":
         name: "storage.type.puck"
@@ -121,6 +103,9 @@ repository:
     end: "(?<=\\})"
     name: "meta.enum.declaration.puck"
     patterns: [
+      {
+        include: "#type-parameters"
+      }
       {
         include: "#type-declaration-body"
       }
@@ -144,22 +129,16 @@ repository:
         include: "#paren-expression"
       }
       {
-        include: "#var-expr"
+        include: "#function-declaration"
       }
       {
         include: "#declaration"
-      }
-      {
-        include: "#new-expr"
       }
       {
         include: "#block"
       }
       {
         include: "#import-operator"
-      }
-      {
-        include: "#expression-operator"
       }
       {
         include: "#relational-operator"
@@ -172,9 +151,6 @@ repository:
       }
       {
         include: "#assignment-operator"
-      }
-      {
-        include: "#storage-keyword"
       }
       {
         include: "#type-primitive"
@@ -185,65 +161,23 @@ repository:
       {
         include: "#control-keyword"
       }
-    ]
-  "expression-operator":
-    match: "\\b(in|as|is)\\b"
-    name: "keyword.others.puck"
-  "expression-type":
-    name: "meta.expression.puck"
-    patterns: [
       {
-        include: "#string"
-      }
-      {
-        include: "#template"
-      }
-      {
-        include: "#comment"
-      }
-      {
-        include: "#literal"
-      }
-      {
-        include: "#paren-expression"
-      }
-      {
-        include: "#import-operator"
-      }
-      {
-        include: "#expression-operator"
-      }
-      {
-        include: "#relational-operator"
-      }
-      {
-        include: "#arithmetic-operator"
-      }
-      {
-        include: "#logic-operator"
-      }
-      {
-        include: "#assignment-operator"
-      }
-      {
-        include: "#type-primitive"
-      }
-      {
-        include: "#function-call"
+        include: "#identifier"
       }
     ]
-  "field-declaration":
-    begin: "(?<!\\()\\s*((?:\\b[a-zA-Z_$][\\w$]*)|(?:\\'[^']*\\')|(?:\\\"[^\"]*\\\"))\\s*(\\?\\s*)?(?=(=|:))"
+  "function-arguments-type-bound":
+    begin: "(\\())"
     beginCaptures:
       "1":
-        name: "variable.puck"
-      "2":
-        name: "keyword.others.puck"
-    end: "(?=\\}|;|,|$)|(?<=\\})"
-    name: "meta.field.declaration.puck"
+        name: "meta.paren.puck"
+    end: "(\\))\\s*->"
+    endCaptures:
+      "1":
+        name: "meta.paren.puck"
+    name: "meta.type.function.return.puck"
     patterns: [
       {
-        include: "#expression"
+        include: "#type-bound"
       }
     ]
   "function-call":
@@ -257,7 +191,7 @@ repository:
       }
     ]
   "function-declaration":
-    begin: "\\b(?:(export)\\s+)?(fn\\b)(?:\\s+([a-zA-Z_$][\\w$]*))?\\s*"
+    begin: "\\b(?:(export)\\s+)?(fn\\b)(?:\\s+([a-zA-Z_]\\w*))?\\s*"
     beginCaptures:
       "1":
         name: "storage.type.puck"
@@ -265,7 +199,7 @@ repository:
         name: "storage.type.function.puck"
       "3":
         name: "entity.name.function.puck"
-    end: "(?=;|\\})|(?<=\\})"
+    end: "(?=$|\\})"
     name: "meta.function.puck"
     patterns: [
       {
@@ -275,16 +209,16 @@ repository:
         include: "#type-parameters"
       }
       {
-        include: "#function-type-parameters"
+        include: "#function-parameters"
       }
       {
-        include: "#return-type"
+        include: "#function-return-type-bound"
       }
       {
-        include: "#decl-block"
+        include: "#block"
       }
     ]
-  "function-type-parameters":
+  "function-parameters":
     begin: "\\("
     beginCaptures:
       "0":
@@ -293,23 +227,51 @@ repository:
     endCaptures:
       "0":
         name: "meta.brace.round.puck"
-    name: "meta.function.type.parameter.puck"
+    name: "meta.function.parameters.puck"
     patterns: [
       {
         include: "#comment"
       }
       {
-        include: "#parameter-name"
+        include: "#mutable-parameter-declaration"
       }
       {
-        include: "#type-annotation"
-      }
-      {
-        include: "#variable-initializer"
+        include: "#parameter-declaration"
       }
     ]
+  "function-return-type-bound":
+    begin: "\\->"
+    end: "(?=$|\\{)"
+    name: "meta.function.return-type.puck"
+    patterns: [
+      {
+        include: "#type-bound"
+      }
+    ]
+  "function-type-bound":
+    name: "meta.type.function.puck"
+    patterns: [
+      {
+        include: "#type-parameters"
+      }
+      {
+        include: "#function-arguments-type-bound"
+      }
+      {
+        include: "#type-bound"
+      }
+      {
+        include: "#type-bound"
+      }
+    ]
+  identifier:
+    captures:
+      "0":
+        name: "variable.other.puck"
+    match: "\\b([a-zA-Z_][\\w]*)\\b"
+    name: "meta.identifier.puck"
   "impl-declaration":
-    begin: "\\b(impl)\\b\\s+([a-zA-Z_$][\\w$]*)\\s*\\b(for)\\b\\s+([a-zA-Z_$][\\w$]*)\\s*"
+    begin: "\\b(impl)\\b\\s+([a-zA-Z_]\\w*)\\s*\\b(for)\\b\\s+([a-zA-Z_]\\w*)\\s*"
     beginCaptures:
       "1":
         name: "keyword.other.puck"
@@ -327,7 +289,7 @@ repository:
       }
     ]
   "implShort-declaration":
-    begin: "\\b(impl)\\b\\s+([a-zA-Z_$][\\w$]*)\\s*"
+    begin: "\\b(impl)\\b\\s+([a-zA-Z_]\\w*)\\s*"
     beginCaptures:
       "1":
         name: "keyword.other.puck"
@@ -343,35 +305,6 @@ repository:
   "import-operator":
     match: "\\b(import|from)\\b"
     name: "keyword.control.import.include.puck"
-  "indexer-declaration":
-    begin: "\\["
-    beginCaptures:
-      "0":
-        name: "meta.brace.square.puck"
-    end: "(\\])\\s*(\\?\\s*)?|$"
-    endCaptures:
-      "1":
-        name: "meta.brace.square.puck"
-      "2":
-        name: "keyword.others.puck"
-    name: "meta.indexer.declaration.puck"
-    patterns: [
-      {
-        include: "#type-annotation"
-      }
-      {
-        include: "#indexer-parameter"
-      }
-      {
-        include: "#expression"
-      }
-    ]
-  "indexer-parameter":
-    captures:
-      "1":
-        name: "variable.parameter.puck"
-    match: "([a-zA-Z_$][\\w$]*)(?=\\:)"
-    name: "meta.indexer.parameter.puck"
   "lambda-declaration":
     name: "meta.function.puck"
     patterns: [
@@ -388,7 +321,7 @@ repository:
         include: "#expression"
       }
       {
-        include: "#decl-block"
+        include: "#block"
       }
     ]
   "lambda-type-parameters":
@@ -415,6 +348,21 @@ repository:
         include: "#variable-initializer"
       }
     ]
+  "let-declaration":
+    begin: "\\b(let)\\b"
+    beginCaptures:
+      "1":
+        name: "storage.type.puck"
+    end: "(?=$|[;,)])"
+    name: "meta.let.declaration.puck"
+    patterns: [
+      {
+        include: "#mutable-variable-declaration"
+      }
+      {
+        include: "#variable-declaration"
+      }
+    ]
   literal:
     name: "literal.puck"
     patterns: [
@@ -434,52 +382,106 @@ repository:
   "logic-operator":
     match: "\\b(not|and|or)\\b"
     name: "keyword.arithmetic.puck"
-  "numeric-literal":
-    match: "\\b(?<=[^$])((0(x|X)[0-9a-fA-F]+)|(0(o|O)[0-7]+)|(0(b|B)(0|1)+)|(([0-9]+(\\.[0-9]+)?))([eE]([+-]?)[0-9]+(\\.[0-9]+)?)?)\\b"
-    name: "constant.numeric.puck"
-  "object-body":
-    begin: "\\{"
+  "mutable-parameter-declaration":
+    begin: "\\b(mut)\\b\\s+([a-zA-Z_]\\w*)\\s*"
     beginCaptures:
-      "0":
-        name: "meta.brace.curly.puck"
-    end: "\\}"
-    endCaptures:
-      "0":
-        name: "meta.brace.curly.puck"
-    name: "meta.object.body.puck"
+      "1":
+        name: "storage.type.puck"
+      "2":
+        name: "variable.parameter.readwrite.puck"
+    end: "(?=$|[;,)])"
+    name: "meta.parameter.declaration.puck"
     patterns: [
       {
-        include: "#string"
+        include: "#type-annotation"
       }
       {
         include: "#comment"
       }
       {
-        include: "#field-declaration"
+        include: "#variable-initializer"
       }
-      {
-        include: "#indexer-declaration"
-      }
+    ]
+  "mutable-variable-declaration":
+    begin: "\\b(mut)\\b\\s+([a-zA-Z_]\\w*)\\s*"
+    beginCaptures:
+      "1":
+        name: "storage.type.puck"
+      "2":
+        name: "variable.other.readwrite.puck"
+    end: "(?=$|[;,)])"
+    name: "meta.variable.declaration.puck"
+    patterns: [
       {
         include: "#type-annotation"
       }
       {
+        include: "#comment"
+      }
+      {
         include: "#variable-initializer"
       }
+    ]
+  "named-type-bound":
+    captures:
+      "1":
+        name: "entity.name.type.puck"
+    match: "\\b([a-zA-Z_][\\w]*)\\b\\s*"
+    name: "meta.type.named.puck"
+    patterns: [
       {
-        include: "#static-modifier"
-      }
-      {
-        include: "#property-accessor"
+        include: "#type-parameters"
       }
     ]
+  "numeric-literal":
+    match: "\\b(?<=[^$])((0x[0-9a-fA-F]+)|(0o[0-7]+)|(0b(0|1)+)|(([0-9]+(\\.[0-9]+)?))([eE]([+-]?)[0-9]+(\\.[0-9]+)?)?)\\b"
+    name: "constant.numeric.puck"
   "object-member":
-    begin: "[a-zA-Z_$][\\w$]*\\s*:"
+    begin: "[a-zA-Z_]\\w*\\s*:"
     end: "(?=,|\\})"
     name: "meta.object.member.puck"
     patterns: [
       {
         include: "#expression"
+      }
+    ]
+  "object-type-bound":
+    begin: "\\{"
+    end: "\\}"
+    name: "meta.type.object.puck"
+    patterns: [
+      {
+        include: "#object-type-bound-member"
+      }
+    ]
+  "object-type-bound-member":
+    begin: "\\b([a-zA-Z_][\\w]*)\\b\\s*:\\s*"
+    beginCaptures:
+      "1":
+        name: "entity.name.variable.puck"
+    end: "(?=[,}]|(?:\\b([a-zA-Z_][\\w]*)\\b\\s*:))"
+    name: "meta.type.object.member.puck"
+    patterns: [
+      {
+        include: "#type-bound"
+      }
+    ]
+  "parameter-declaration":
+    begin: "\\b([a-zA-Z_]\\w*)\\s*"
+    beginCaptures:
+      "1":
+        name: "variable.parameter.constant.puck"
+    end: "(?=$|[;,)])"
+    name: "meta.parameter.declaration.puck"
+    patterns: [
+      {
+        include: "#type-annotation"
+      }
+      {
+        include: "#comment"
+      }
+      {
+        include: "#variable-initializer"
       }
     ]
   "parameter-name":
@@ -490,7 +492,7 @@ repository:
         name: "variable.parameter.puck"
       "3":
         name: "keyword.others.puck"
-    match: "(?:\\s*\\b\\s+)?(\\.\\.\\.)?\\s*([a-zA-Z_$][\\w$]*)\\s*(\\??)"
+    match: "(?:\\s*\\b\\s+)?(\\.\\.\\.)?\\s*([a-zA-Z_]\\w*)\\s*(\\??)"
     name: "parameter.name.puck"
   "paren-expression":
     begin: "\\("
@@ -506,9 +508,6 @@ repository:
         include: "#expression"
       }
     ]
-  "property-accessor":
-    match: "\\b(get|set)\\b"
-    name: "storage.type.property.puck"
   "qstring-double":
     begin: "\""
     beginCaptures:
@@ -554,7 +553,7 @@ repository:
     name: "meta.return.type.puck"
     patterns: [
       {
-        include: "#type"
+        include: "#type-bound"
       }
     ]
   "self-literal":
@@ -569,9 +568,6 @@ repository:
         include: "#string-character-escape"
       }
     ]
-  "storage-keyword":
-    match: "\\b(?:(export)\\s+)?((let(?:\\s+(mut))?)|const)\\b"
-    name: "storage.type.puck"
   string:
     name: "string.puck"
     patterns: [
@@ -587,13 +583,7 @@ repository:
     name: "constant.character.escape"
   "template-substitution-element":
     begin: "\\$\\{"
-    beginCaptures:
-      "0":
-        name: "keyword.others.puck"
     end: "\\}"
-    endCaptures:
-      "0":
-        name: "keyword.others.puck"
     name: "template.element.puck"
     patterns: [
       {
@@ -601,7 +591,7 @@ repository:
       }
     ]
   "trait-declaration":
-    begin: "\\b(?:(export)\\s+)?(trait)\\b\\s+([a-zA-Z_$][\\w$]*)\\s*"
+    begin: "\\b(?:(export)\\s+)?(trait)\\b\\s+([a-zA-Z_]\\w*)\\s*"
     beginCaptures:
       "1":
         name: "storage.type.puck"
@@ -613,62 +603,63 @@ repository:
     name: "meta.trait.declaration.puck"
     patterns: [
       {
+        include: "#type-parameters"
+      }
+      {
         include: "#function-declaration"
       }
     ]
-  type:
+  "tuple-type-bound":
+    begin: "\\("
+    end: "\\)"
+    name: "meta.type.tuple.puck"
+    patterns: [
+      {
+        include: "#tuple-type-bound-member"
+      }
+    ]
+  "tuple-type-bound-member":
+    begin: "(?=[^)])"
+    end: ",|(?=\\))"
+    name: "meta.type.tuple.member.puck"
+    patterns: [
+      {
+        include: "#type-bound"
+      }
+    ]
+  "type-annotation":
+    begin: ":"
+    end: "(?=$|[;,)=])"
+    name: "meta.type.annotation.puck"
+    patterns: [
+      {
+        include: "#type-bound"
+      }
+    ]
+  "type-bound":
     name: "meta.type.puck"
     patterns: [
       {
         include: "#type-primitive"
       }
       {
-        include: "#type-parameters"
+        include: "#named-type-bound"
       }
       {
-        include: "#type-tuple"
+        include: "#tuple-type-bound"
       }
       {
-        include: "#type-object"
-      }
-      {
-        include: "#type-operator"
-      }
-      {
-        include: "#type-paren-or-function-type-parameters"
-      }
-      {
-        include: "#type-function-return-type"
-      }
-      {
-        include: "#type-name"
-      }
-    ]
-  "type-annotation":
-    begin: ":"
-    end: "(?=$|[,);\\}\\]]|//)|(?==[^>])|(?<=[\\}>\\]\\)]|[a-zA-Z_$])\\s*(?=\\{)"
-    name: "meta.type.annotation.puck"
-    patterns: [
-      {
-        include: "#expression-operator"
-      }
-      {
-        include: "#type"
-      }
-      {
-        include: "#string"
-      }
-      {
-        include: "#comment"
+        include: "#object-type-bound"
       }
     ]
   "type-declaration":
-    captures:
+    begin: "\\b(?:(export)\\s+)?(type)\\b\\s*"
+    beginCaptures:
       "1":
         name: "storage.type.puck"
       "2":
         name: "keyword.other.puck"
-    match: "\\b(?:(export)\\s+)?(type)\\b\\s*"
+    end: "(?=[)}]|$)"
     name: "meta.type.declaration.puck"
     patterns: [
       {
@@ -676,173 +667,70 @@ repository:
       }
     ]
   "type-declaration-body":
-    begin: "\\b([a-zA-Z_$][\\w$]*)\\s*"
+    begin: "\\s*\\b([a-zA-Z_]\\w*)\\s*"
     beginCaptures:
       "1":
         name: "entity.name.type.puck"
-    end: "(?=[})])"
+    end: "(?=[)}]|$)"
     name: "meta.type.declaration.body.puck"
     patterns: [
       {
         include: "#type-parameters"
       }
       {
-        include: "#type"
+        include: "#object-type-bound"
       }
     ]
-  "type-function-return-type":
-    begin: "=>"
-    beginCaptures:
-      "0":
-        name: "keyword.operator.puck"
-    end: "(?=\\s*[,\\)\\{=;>]|//|$)"
-    name: "meta.type.function.return.puck"
-    patterns: [
-      {
-        include: "#type"
-      }
-    ]
-  "type-name":
-    captures:
-      "1":
-        name: "entity.name.type.puck"
-    match: "[a-zA-Z_$][.\\w$]*"
-    name: "meta.type.name.puck"
-  "type-object":
-    begin: "\\{"
-    beginCaptures:
-      "0":
-        name: "meta.brace.curly.puck"
-    end: "\\}"
-    endCaptures:
-      "0":
-        name: "meta.brace.curly.puck"
-    name: "meta.object.type.puck"
-    patterns: [
-      {
-        include: "#comment"
-      }
-      {
-        include: "#field-declaration"
-      }
-      {
-        include: "#method-declaration"
-      }
-      {
-        include: "#indexer-declaration"
-      }
-      {
-        include: "#type-annotation"
-      }
-    ]
-  "type-operator":
-    match: "[.|]"
-    name: "keyword.operator.type.puck"
   "type-parameters":
-    begin: "([a-zA-Z_$][\\w$]*)?(<)"
+    begin: "(<)"
     beginCaptures:
-      "1":
-        name: "entity.name.type.puck"
-      "2":
+      "0":
         name: "meta.brace.angle.puck"
-    end: "(?=$)|(>)"
+    end: "(>)"
     endCaptures:
-      "2":
+      "0":
         name: "meta.brace.angle.puck"
     name: "meta.type.parameters.puck"
     patterns: [
       {
-        match: "\\b(extends)\\b"
+        match: "\\b(:)\\b"
         name: "keyword.other.puck"
       }
       {
         include: "#comment"
       }
       {
-        include: "#type"
-      }
-    ]
-  "type-paren-or-function-type-parameters":
-    begin: "(?:\\b(new)\\b)?\\s*\\("
-    beginCaptures:
-      "1":
-        name: "keyword.control.puck"
-    end: "\\)"
-    name: "meta.type.paren.cover.puck"
-    patterns: [
-      {
-        include: "#comment"
-      }
-      {
-        include: "#type"
-      }
-      {
-        include: "#function-type-parameters"
+        include: "#type-bound"
       }
     ]
   "type-primitive":
     match: "\\b(Self)\\b"
     name: "storage.type.source.puck"
-  "type-tuple":
-    begin: "\\["
-    beginCaptures:
-      "0":
-        name: "meta.brace.square.puck"
-    end: "\\]"
-    endCaptures:
-      "0":
-        name: "meta.brace.square.puck"
-    name: "meta.type.tuple.puck"
-    patterns: [
-      {
-        include: "#type"
-      }
-      {
-        include: "#comment"
-      }
-    ]
-  "var-expr":
-    begin: "(?<!\\()\\s*\\b(let(?!\\s+mut)|const)\\b"
+  "variable-declaration":
+    begin: "\\b([a-zA-Z_]\\w*)\\s*"
     beginCaptures:
       "1":
-        name: "storage.type.puck"
-    end: "(?=$|;)"
-    name: "meta.var.expr.puck"
-    patterns: [
-      {
-        include: "#var-single-variable"
-      }
-      {
-        include: "#comment"
-      }
-    ]
-  "var-single-variable":
-    begin: "\\b([a-zA-Z_$][\\w$]*)\\s*(=?)"
-    beginCaptures:
-      "1":
-        name: "variable.puck"
-    end: "(?=$|[;,])"
-    name: "meta.var-single-variable.expr.puck"
+        name: "variable.other.constant.puck"
+    end: "(?=$|[;,)])"
+    name: "meta.variable.declaration.puck"
     patterns: [
       {
         include: "#type-annotation"
       }
       {
-        include: "#string"
-      }
-      {
         include: "#comment"
       }
       {
-        include: "#expression"
+        include: "#variable-initializer"
       }
     ]
   "variable-initializer":
     begin: "(=)"
     beginCaptures:
       "1":
-        name: "keyword.operator.comparison.puck"
-    end: "(?=$|[,);=])"
+        name: "keyword.operator.assignment.puck"
+    end: "(?=$|[;,)])"
+    name: "meta.variable.declaration.initializer.puck"
     patterns: [
       {
         include: "#expression"
