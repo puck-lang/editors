@@ -10,3 +10,4 @@ rm -rf .tmp _output
 
 # VS code
 cp general/puck.tmLanguage vscode/syntaxes/
+(cd vscode && tsc)

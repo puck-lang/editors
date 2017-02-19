@@ -14,4 +14,5 @@ To modify the grammar, modify the `general/puck.YAML-tmLanguage` file.
 Then use **Sublime Text** with the **PackageDev** plugin the build it to the plist file `general/puck.tmLanguage`.
 
 Install atomizr `gem install atomizr`
+Install dependencies `(cd vscode && yarn)`
 Run `./build.sh`

@@ -1,2 +1,5 @@
 vscode/client/
 vscode/server/
+
+dist/
+node_modules/

@@ -1,26 +1,48 @@
 {
-    "name": "puck",
-    "displayName": "Puck",
-    "description": "",
-    "version": "0.0.1",
-    "publisher": "Rasmus",
-    "engines": {
-        "vscode": "^1.0.0"
-    },
-    "categories": [
-        "Languages"
-    ],
-    "contributes": {
-        "languages": [{
-            "id": "puck",
-            "aliases": ["Puck", "puck"],
-            "extensions": [".puck"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "puck",
-            "scopeName": "source.puck",
-            "path": "./syntaxes/puck.tmLanguage"
-        }]
-    }
+  "name": "puck",
+  "displayName": "Puck",
+  "description": "Puck language integration for VS code",
+  "author": "Rasmus Eneman",
+  "version": "0.0.1",
+  "preview": true,
+  "publisher": "Rasmus",
+  "engines": {
+    "vscode": "^1.8.0"
+  },
+  "categories": [
+    "Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:puck"
+  ],
+  "main": "./dist/extension",
+  "contributes": {
+    "languages": [{
+      "id": "puck",
+      "aliases": ["Puck", "puck"],
+      "extensions": [".puck"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "puck",
+      "scopeName": "source.puck",
+      "path": "./syntaxes/puck.tmLanguage"
+    }]
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "update-vscode": "node ./node_modules/vscode/bin/install",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "@types/node": "^6.0.52",
+    "typescript": "^2.1.5",
+    "vscode": "^1.0.3"
+  },
+  "dependencies": {
+    "puck-lang": "^0.2.0",
+    "vscode-languageclient": "^3.0.3",
+    "vscode-languageserver": "^3.0.4"
+  }
 }
