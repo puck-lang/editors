@@ -65,6 +65,10 @@ documents.onDidSave(change => {
 	validateTextDocument(change.document);
 })
 
+documents.onDidClose(change => {
+	context.onClose(fromUri(change.document.uri))
+})
+
 // // The settings interface describe the server relevant settings part
 // interface Settings {
 // 	languageServerExample: ExampleSettings;
