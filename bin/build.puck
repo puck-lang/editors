@@ -1,0 +1,20 @@
+import 'node:fs' as fs
+import 'node:js-yaml' as yaml
+import 'node:plist' as plist
+
+fn writePlistFile(grammar, fileName: String) {
+  let text = plist->build(grammar)
+  fs->writeFileSync(fileName, text, 'utf8')
+}
+
+fn readYaml(fileName: String) {
+  let text = fs.readFileSync(fileName, 'utf8')
+  yaml->safeLoad(text)
+}
+ 
+fn buildGrammar() {
+  let grammar = readYaml('general/puck.YAML-tmLanguage')
+  writePlistFile(grammar, 'general/puck.tmLanguage')
+}
+
+buildGrammar()

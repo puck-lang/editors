@@ -1,0 +1,12 @@
+{
+  "name": "puck-grammar",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:puck-lang/editors.git",
+  "author": "Rasmus Eneman <pie.or.paj@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "^3.7.0",
+    "plist": "^2.0.1"
+  }
+}
