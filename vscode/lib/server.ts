@@ -116,7 +116,7 @@ connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): Comp
 
 // This handler resolve additional information for the item selected in
 // the completion list.
-// connection.onCompletionResolve((item: CompletionItem): CompletionItem => {
+connection.onCompletionResolve((item: CompletionItem): CompletionItem => {
 // 	if (item.data === 1) {
 // 		item.detail = 'TypeScript details',
 // 		item.documentation = 'TypeScript documentation'
@@ -124,8 +124,8 @@ connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): Comp
 // 		item.detail = 'JavaScript details',
 // 		item.documentation = 'JavaScript documentation'
 // 	}
-// 	return item;
-// });
+	return item;
+});
 
 connection.onHover((textDocumentPosition: TextDocumentPositionParams): Hover => {
 	const filePath = fromUri(textDocumentPosition.textDocument.uri)
