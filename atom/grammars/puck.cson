@@ -419,7 +419,7 @@ repository:
         include: "#tuple-type-bound"
       }
       {
-        include: "#object-type-bound"
+        include: "#record-type-bound"
       }
     ]
   "named-type-bound":
@@ -446,8 +446,8 @@ repository:
         include: "#tuple-type-bound-member"
       }
     ]
-  "object-type-bound":
-    name: "meta.type.object.puck"
+  "record-type-bound":
+    name: "meta.type.record.puck"
     begin: "\\{"
     end: "\\}"
     patterns: [
@@ -455,7 +455,7 @@ repository:
         include: "#comment"
       }
       {
-        include: "#object-type-bound-member"
+        include: "#record-type-bound-member"
       }
     ]
   "function-type-bound":
@@ -483,13 +483,13 @@ repository:
         include: "#type-bound"
       }
     ]
-  "object-type-bound-member":
-    name: "meta.type.object.member.puck"
+  "record-type-bound-member":
+    name: "meta.type.record.member.puck"
     begin: "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b\\s*:\\s*"
     beginCaptures:
       "1":
         name: "entity.name.variable.puck"
-    end: "(?=[,}]|(?:\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b\\s*:))"
+    end: "(?=[^a-zA-Z0-9_<])"
     patterns: [
       {
         include: "#type-bound"
@@ -579,7 +579,7 @@ repository:
         include: "#type-parameters"
       }
       {
-        include: "#object-type-bound"
+        include: "#record-type-bound"
       }
     ]
   "enum-declaration":

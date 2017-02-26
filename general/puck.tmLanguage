@@ -769,7 +769,7 @@
           </dict>
           <dict>
             <key>include</key>
-            <string>#object-type-bound</string>
+            <string>#record-type-bound</string>
           </dict>
         </array>
       </dict>
@@ -817,10 +817,10 @@
           </dict>
         </array>
       </dict>
-      <key>object-type-bound</key>
+      <key>record-type-bound</key>
       <dict>
         <key>name</key>
-        <string>meta.type.object.puck</string>
+        <string>meta.type.record.puck</string>
         <key>begin</key>
         <string>\{</string>
         <key>end</key>
@@ -833,7 +833,7 @@
           </dict>
           <dict>
             <key>include</key>
-            <string>#object-type-bound-member</string>
+            <string>#record-type-bound-member</string>
           </dict>
         </array>
       </dict>
@@ -877,10 +877,10 @@
           </dict>
         </array>
       </dict>
-      <key>object-type-bound-member</key>
+      <key>record-type-bound-member</key>
       <dict>
         <key>name</key>
-        <string>meta.type.object.member.puck</string>
+        <string>meta.type.record.member.puck</string>
         <key>begin</key>
         <string>\b([a-zA-Z_][a-zA-Z0-9_]*)\b\s*:\s*</string>
         <key>beginCaptures</key>
@@ -892,7 +892,7 @@
           </dict>
         </dict>
         <key>end</key>
-        <string>(?=[,}]|(?:\b([a-zA-Z_][a-zA-Z0-9_]*)\b\s*:))</string>
+        <string>(?=[^a-zA-Z0-9_&lt;])</string>
         <key>patterns</key>
         <array>
           <dict>
@@ -1060,7 +1060,7 @@
           </dict>
           <dict>
             <key>include</key>
-            <string>#object-type-bound</string>
+            <string>#record-type-bound</string>
           </dict>
         </array>
       </dict>
