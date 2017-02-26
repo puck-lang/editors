@@ -44,6 +44,7 @@ connection.onInitialize((params): InitializeResult => {
 			
 			completionProvider: {
 				resolveProvider: true,
+				triggerCharacters: ['.', '::', '/'],
 			},
 			hoverProvider: true,
 			definitionProvider: true,
@@ -53,9 +54,9 @@ connection.onInitialize((params): InitializeResult => {
 
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
-// documents.onDidChangeContent((change) => {
-// 	validateTextDocument(change.document);
-// });
+documents.onDidChangeContent((change) => {
+	validateTextDocument(change.document, true);
+});
 
 documents.onDidOpen(change => {
 	validateTextDocument(change.document);
@@ -91,12 +92,12 @@ documents.onDidClose(change => {
 // 	documents.all().forEach(validateTextDocument);
 // });
 
-function validateTextDocument(textDocument: TextDocument): void {
+function validateTextDocument(textDocument: TextDocument, ignoreSyntaxErrors = true): void {
 	const filePath = fromUri(textDocument.uri)
 	if (filePath) {
 		diagnostics = []
 		fileValidating = filePath
-		context.validateDocument(filePath, textDocument.getText())
+		context.validateDocument(filePath, textDocument.getText(), ignoreSyntaxErrors)
  		connection.sendDiagnostics({uri: textDocument.uri, diagnostics})
 	}
 }
@@ -132,12 +133,13 @@ connection.onHover((textDocumentPosition: TextDocumentPositionParams): Hover => 
 	if (filePath) {
 		const hover = context.onHover(filePath, toPuckPosition(textDocumentPosition.position))
 
-		return {
-			contents: hover.contents,
-			range: hover.span && fromSpan(hover.span),
+		if (hover.kind === 'Some') {
+			return {
+				contents: hover.value[0].contents,
+				range: fromSpan(hover.value[0].span),
+			}
 		}
 	} 
-	else return {contents: []}
 })
 
 connection.onDefinition((textDocumentPosition: TextDocumentPositionParams): Array<Location> => {
