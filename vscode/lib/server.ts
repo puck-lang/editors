@@ -9,7 +9,8 @@ import {
 	createConnection, IConnection, TextDocumentSyncKind,
 	TextDocuments, TextDocument, Diagnostic, DiagnosticSeverity,
 	InitializeParams, InitializeResult, TextDocumentPositionParams,
-	CompletionItem, CompletionItemKind, Hover, Position, Range, StreamMessageReader, StreamMessageWriter, Location
+	CompletionItem, CompletionItemKind, Hover, Position, Range, 
+	StreamMessageReader, StreamMessageWriter, Location, SignatureHelp,
 } from 'vscode-languageserver';
 import {createServer} from 'puck-lang/dist/lib/pls'
 
@@ -48,6 +49,9 @@ connection.onInitialize((params): InitializeResult => {
 			},
 			hoverProvider: true,
 			definitionProvider: true,
+			signatureHelpProvider: {
+				triggerCharacters: ['(', ','],
+			},
 		}
 	}
 });
@@ -151,7 +155,17 @@ connection.onDefinition((textDocumentPosition: TextDocumentPositionParams): Arra
 				range: fromSpan(location.span),
 			}))
 	}
-	else return []
+})
+
+connection.onSignatureHelp((textDocumentPosition: TextDocumentPositionParams): SignatureHelp => {
+	const filePath = fromUri(textDocumentPosition.textDocument.uri)
+	if (filePath) {
+		const signature = context.onSignatureHelp(filePath, toPuckPosition(textDocumentPosition.position))
+
+		if (signature.kind === 'Some') {
+			return signature.value[0]
+		}
+	}
 })
 
 
