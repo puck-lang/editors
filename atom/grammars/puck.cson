@@ -163,7 +163,7 @@ repository:
         name: "storage.type.function.puck"
       "3":
         name: "entity.name.function.puck"
-    end: "(?=$|\\})"
+    end: "(?=$|\\}|\\bfn\\b)"
     patterns: [
       {
         include: "#comment"
@@ -204,8 +204,8 @@ repository:
     ]
   "function-return-type-bound":
     name: "meta.function.return-type.puck"
-    begin: "\\->"
-    end: "(?=$|\\{)"
+    begin: "\\->\\s*"
+    end: "(?=[^a-zA-Z0-9_<(])"
     patterns: [
       {
         include: "#type-bound"
@@ -581,6 +581,9 @@ repository:
       {
         include: "#record-type-bound"
       }
+      {
+        include: "#tuple-type-bound"
+      }
     ]
   "enum-declaration":
     name: "meta.enum.declaration.puck"
@@ -714,7 +717,7 @@ repository:
     ]
   "mutable-parameter-declaration":
     name: "meta.mutable.parameter.declaration.puck"
-    begin: "\\b(mut)\\b\\s+(?:(self)|([a-zA-Z_][a-zA-Z0-9_]*))\\s*"
+    begin: "\\b(mut)\\b\\s+(?:(\\bself\\b)|([a-zA-Z_][a-zA-Z0-9_]*))\\s*"
     beginCaptures:
       "1":
         name: "storage.type.puck"
@@ -736,7 +739,7 @@ repository:
     ]
   "parameter-declaration":
     name: "meta.parameter.declaration.puck"
-    begin: "\\b(?:(self)|([a-zA-Z_][a-zA-Z0-9_]*))\\s*"
+    begin: "\\b(?:(\\bself\\b)|([a-zA-Z_][a-zA-Z0-9_]*))\\s*"
     beginCaptures:
       "1":
         name: "variable.language.self.constant.puck"

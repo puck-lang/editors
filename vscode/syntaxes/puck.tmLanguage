@@ -300,7 +300,7 @@
           </dict>
         </dict>
         <key>end</key>
-        <string>(?=$|\})</string>
+        <string>(?=$|\}|\bfn\b)</string>
         <key>patterns</key>
         <array>
           <dict>
@@ -370,9 +370,9 @@
         <key>name</key>
         <string>meta.function.return-type.puck</string>
         <key>begin</key>
-        <string>\-&gt;</string>
+        <string>\-&gt;\s*</string>
         <key>end</key>
-        <string>(?=$|\{)</string>
+        <string>(?=[^a-zA-Z0-9_&lt;(])</string>
         <key>patterns</key>
         <array>
           <dict>
@@ -1062,6 +1062,10 @@
             <key>include</key>
             <string>#record-type-bound</string>
           </dict>
+          <dict>
+            <key>include</key>
+            <string>#tuple-type-bound</string>
+          </dict>
         </array>
       </dict>
       <key>enum-declaration</key>
@@ -1306,7 +1310,7 @@
         <key>name</key>
         <string>meta.mutable.parameter.declaration.puck</string>
         <key>begin</key>
-        <string>\b(mut)\b\s+(?:(self)|([a-zA-Z_][a-zA-Z0-9_]*))\s*</string>
+        <string>\b(mut)\b\s+(?:(\bself\b)|([a-zA-Z_][a-zA-Z0-9_]*))\s*</string>
         <key>beginCaptures</key>
         <dict>
           <key>1</key>
@@ -1348,7 +1352,7 @@
         <key>name</key>
         <string>meta.parameter.declaration.puck</string>
         <key>begin</key>
-        <string>\b(?:(self)|([a-zA-Z_][a-zA-Z0-9_]*))\s*</string>
+        <string>\b(?:(\bself\b)|([a-zA-Z_][a-zA-Z0-9_]*))\s*</string>
         <key>beginCaptures</key>
         <dict>
           <key>1</key>
