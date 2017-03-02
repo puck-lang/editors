@@ -27,7 +27,18 @@
       "language": "puck",
       "scopeName": "source.puck",
       "path": "./syntaxes/puck.tmLanguage"
-    }]
+    }],
+    "commands": [{
+      "command": "puck.reload",
+      "title": "Reload Puck Project"
+    }],
+    "configurationDefaults": {
+      "[puck]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.trimAutoWhitespace": true
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "tsc -p ./",

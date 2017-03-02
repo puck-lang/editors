@@ -9,8 +9,9 @@ import {
 	createConnection, IConnection, TextDocumentSyncKind,
 	TextDocuments, TextDocument, Diagnostic, DiagnosticSeverity,
 	InitializeParams, InitializeResult, TextDocumentPositionParams,
-	CompletionItem, CompletionItemKind, Hover, Position, Range, 
+	CompletionItem, CompletionItemKind, Hover, Position, Range, Command,
 	StreamMessageReader, StreamMessageWriter, Location, SignatureHelp,
+	CodeActionParams, ExecuteCommandParams,
 } from 'vscode-languageserver';
 import {createServer} from 'puck-lang/dist/lib/pls'
 
@@ -37,7 +38,7 @@ connection.onInitialize((params): InitializeResult => {
 		if (file === fileValidating) {
 			diagnostics.push(diagnostic)
 		}
-	})
+	}, edit => connection.workspace.applyEdit(edit))
 	return {
 		capabilities: {
 			// Tell the client that the server works in FULL text document sync mode
@@ -49,8 +50,15 @@ connection.onInitialize((params): InitializeResult => {
 			},
 			hoverProvider: true,
 			definitionProvider: true,
+			codeActionProvider: true,
 			signatureHelpProvider: {
 				triggerCharacters: ['(', ','],
+			},
+			executeCommandProvider: {
+				commands: [
+					'puck.addImport',
+					'puck.reload',
+				],
 			},
 		}
 	}
@@ -168,6 +176,16 @@ connection.onSignatureHelp((textDocumentPosition: TextDocumentPositionParams): S
 	}
 })
 
+connection.onCodeAction((params: CodeActionParams): Array<Command> => {
+	const filePath = fromUri(params.textDocument.uri)
+	if (filePath) {
+		return context.onCodeAction(filePath, toSpan(params.range), params.context)
+	}
+})
+
+connection.onExecuteCommand((params: ExecuteCommandParams) => {
+	context.onExecuteCommand(params)
+})
 
 // connection.onDidOpenTextDocument((params) => {
 // 	// A text document got opened in VSCode.
